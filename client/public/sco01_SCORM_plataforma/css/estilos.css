@@ -1,0 +1,215 @@
+
+footer{
+	/*background-position:left bottom;*/
+	background-color: #1063a4; /*rgb(204, 204, 204);*/
+	/*background-image: url("../img/foot.png");*/
+	
+	/*width:1024px;*/
+	height:55px;
+	/*padding-top: 12px;*/
+	/*position: relative;*/
+	z-index: 20;
+	/*margin-top: -50px;*/
+	/*border:#000000 1px solid;*/
+}
+
+.footer-subtitulo{
+	color: #48BBC0;
+	/*font-family: 'client light';*/
+	font-size: 24px;
+	vertical-align: middle;
+    color: #ffffff;
+	/*padding: 0px 30px 0px 10px;*/
+}
+/* video-player */
+
+.video-player {
+  position: absolute;
+  width: 1024px;
+  height: 638px;/*
+    left: 50%;
+    top: 50%;
+  margin-top: -379px;
+  margin-left: -512px;*/
+
+}
+
+.videogular-container {
+  position: relative;
+  width: 1024px;
+  height: 638px;
+  /*top: 64px;*/
+  z-index: 98;
+}
+
+.video-close-button {
+  position: absolute;
+  /*top: 74px;*/
+  right: 20px;
+  z-index: 99;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.boton{
+	cursor:pointer;
+	border:none;
+	/*margin-left:0px;
+	margin-right: 20px;*/
+	
+	-webkit-filter: drop-shadow(2px 2px 2px rgba(0,0,0,0));
+	-moz-filter: drop-shadow(2px 2px 2px rgba(0,0,0,0));
+	-ms-filter: drop-shadow(2px 2px 2px rgba(0,0,0,0));
+	-o-filter: drop-shadow(2px 2px 2px rgba(0,0,0,0));
+	filter: drop-shadow(2px 2px 2px rgba(0,0,0,0));
+
+	-webkit-transition: all 0.3s ease;
+	-moz-transition: all 0.3s ease;
+	-ms-transition: all 0.3s ease;
+	-o-transition: all 0.3s ease;
+	transition: all 0.3s ease;
+}
+.boton:hover{
+	text-decoration: none;
+	-webkit-filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.5));
+	-moz-filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.5));
+	-ms-filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.5));
+	-o-filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.5));
+	filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.5));
+
+	-webkit-transition: all 0.3s ease;
+	-moz-transition: all 0.3s ease;
+	-ms-transition: all 0.3s ease;
+	-o-transition: all 0.3s ease;
+	transition: all 0.3s ease;
+
+}
+
+a{
+	text-decoration: none;
+}
+a:hover{
+	text-decoration: none;
+}
+.snap-drawers{
+	background: none;
+}
+
+.disabled {
+    /*color: #BABABA;*/
+    cursor: not-allowed;
+	
+	filter: url('#grayscale'); /* Versión SVG para IE10, Chrome 17, FF3.5, Safari 5.2 and Opera 11.6 */
+	-webkit-filter: grayscale(100%);
+	-moz-filter: grayscale(100%);
+	-ms-filter: grayscale(100%);
+	-o-filter: grayscale(100%);
+	filter: grayscale(100%); /* Para cuando es estándar funcione en todos */
+	filter: Gray(); /* IE4-8 and 9 */
+	
+	opacity:0.5;
+
+	-webkit-transition: all 0.5s ease;
+	-moz-transition: all 0.5s ease;
+	-ms-transition: all 0.5s ease;
+	-o-transition: all 0.5s ease;
+	transition: all 0.5s eas
+	
+}
+
+video::-internal-media-controls-download-button {
+    display:none;
+}
+
+video::-webkit-media-controls-enclosure {
+    overflow:hidden;
+}
+
+video::-webkit-media-controls-panel {
+    width: calc(100% + 30px); /* Adjust as needed */
+}
+
+.barra1{
+	margin-right: 80px;
+}
+.barra2{
+	padding-left: 15px;
+	padding-right: 70px;
+	background: #89c6e2;
+}
+
+.hidden-n{
+	display: inline;
+}
+
+/* Ajustes*/ 
+@media (max-width:1080px){
+	/*
+	.hidden-xs, .hidden-n{display:none!important}
+	*/
+}
+@media (max-width:1000px){
+	/*
+	#logo1{
+		display: none;
+	}*/
+}
+@media (max-width:800px){
+	/*
+	#logo2{
+		display: none;
+	}
+	#logos{
+		display: none;
+	}*/
+}
+@media (max-width:600px){
+	/*#btn_home{display: none;}
+	#btn_audio_on{display: none;}
+	#btn_ayuda{display: none;}
+	#btn_glosario{display: none;}*/
+}
+/* Parpadeo para el botón de avanzar */
+.parpadea {
+  
+  animation-name: parpadeo;
+  animation-duration: 1s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+
+  -webkit-animation-name:parpadeo;
+  -webkit-animation-duration: 1s;
+  -webkit-animation-timing-function: linear;
+  -webkit-animation-iteration-count: infinite;
+}
+
+a:focus { outline: none; text-decoration: none;} 
+a:focus { border: 0px; } 
+
+
+@-moz-keyframes parpadeo{  
+  0% { opacity: 1.0; }
+  50% { opacity: 0.0; }
+  100% { opacity: 1.0; }
+}
+
+@-webkit-keyframes parpadeo {  
+  0% { opacity: 1.0; }
+  50% { opacity: 0.0; }
+   100% { opacity: 1.0; }
+}
+
+@keyframes parpadeo {  
+  0% { opacity: 1.0; }
+   50% { opacity: 0.0; }
+  100% { opacity: 1.0; }
+}
+/* Hasta aqui */
+
+
+
+.paginado{
+	display: inline-block;
+	color: #ffffff;
+	/*background-image: url("..img/foot_avanzar.png");*/
+}

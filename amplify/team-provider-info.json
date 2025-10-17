@@ -1,0 +1,27 @@
+{
+  "main": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-femsajedi-main-db1a2-authRole",
+      "UnauthRoleArn": "arn:aws:iam::865893782971:role/amplify-femsajedi-main-db1a2-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::865893782971:role/amplify-femsajedi-main-db1a2-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-femsajedi-main-db1a2-deployment",
+      "UnauthRoleName": "amplify-femsajedi-main-db1a2-unauthRole",
+      "StackName": "amplify-femsajedi-main-db1a2",
+      "StackId": "arn:aws:cloudformation:us-east-1:865893782971:stack/amplify-femsajedi-main-db1a2/3dfc2ee0-45c0-11f0-af8b-0ef0b0ecd9c7",
+      "AmplifyAppId": "d2xsqvzkeqybg2"
+    },
+    "categories": {
+      "api": {
+        "FEMSAJEDI": {},
+        "apitokens": {}
+      },
+      "function": {
+        "femsajedilambda": {
+          "deploymentBucketName": "amplify-femsajedi-main-db1a2-deployment",
+          "s3Key": "amplify-builds/femsajedilambda-334e7847556951733074-build.zip"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,31 @@
+.perfil-background {
+
+	/* width: 100vw;
+	height: 100vh; */
+	min-height: 100vh;
+	min-width: 100vw;
+	/* background: url('../Img/fondo_perfil_escritorio.png'); */
+	background-color: #FFE4A5;
+	background-position: center center; /* Center the image */
+	background-repeat: no-repeat; /* Do not repeat the image */
+	background-size: contain; /* Resize the background image to cover the entire container */
+}
+
+.perfil-form{
+	background: url('../Img/img_puntos.png');
+	background-color: #fff;
+	background-position-y: 10px;
+	background-repeat: no-repeat; /* Do not repeat the image */
+	background-position-x: 50%;
+	background-size:95%; /* Resize the background image to cover the entire container */
+
+	padding: 10px;
+	border-radius: 15px;
+	border: 2px solid black;
+	-webkit-box-shadow: 12px 12px 0px -1px #e1251b; 
+	box-shadow: 12px 12px 0px -1px #e1251b;
+
+	/* top: 0; left: 0; bottom: 0; right: 0; */
+
+}
+

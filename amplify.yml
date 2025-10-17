@@ -1,0 +1,36 @@
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - npm ci
+    build:
+      commands:
+        - npm run build
+  artifacts:
+    baseDirectory: build
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - node_modules/**/*
+  customHeaders:
+    - pattern: '**/*'
+      headers:
+        #- key: 'X-Frame-Options'
+        #  value: 'SAMEORIGIN'
+        - key: 'Content-Security-Policy'
+          value: 'frame-ancestors ''self'' https://www.femsa-jedi.com https://femsa-jedi.com https://femsa-jedi.s3.us-east-1.amazonaws.com'
+        - key: 'X-Content-Type-Options'
+          value: 'nosniff'
+        - key: 'X-XSS-Protection'
+          value: '1; mode=block'
+        - key: 'Referrer-Policy'
+          value: 'no-referrer-when-downgrade'
+        - key: 'Strict-Transport-Security'
+          value: 'max-age=63072000; includeSubDomains; preload'
+# Agregar redirects
+  redirects:
+    - source: '/robots.txt'
+      target: '/'
+      status: '404'

@@ -1,0 +1,6 @@
+{
+  "AppSyncApiName": "FEMSAJEDI",
+  "DynamoDBBillingMode": "PAY_PER_REQUEST",
+  "DynamoDBEnableServerSideEncryption": false,
+  "introspectionConfig": "DISABLED"
+}

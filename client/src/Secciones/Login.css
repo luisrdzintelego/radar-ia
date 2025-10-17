@@ -1,0 +1,105 @@
+.LoginForm {
+	min-width: 700px;
+	position: absolute;
+	text-align: center;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	font-size: 1rem;
+
+  }
+  @media (max-width: 500px) {
+	.LoginForm {
+	  min-width: 90%;
+	}
+  }
+
+
+
+.login-background {
+
+	min-height: 100vh;
+	min-width: 100vw;
+	background: url('../Img/JEDI/fondo.png');
+	background-color: #F05A5F;
+	background-size: cover, cover;
+	background-position-x: 50%; /* Center the image */
+	background-position-y: 50%; /* Center the image */
+	background-repeat: no-repeat; /* Do not repeat the image */
+	/* background-size: 100%; /* Resize the background image to cover the entire container */ 
+}
+
+.login-form{
+
+	/* background: url('../Img/img_puntos.png'); */
+	background-color: #fff;
+	/* padding: 20px; */
+	border-radius: 15px;
+	border: 2px solid #862633;
+	/* -webkit-box-shadow: -12px 12px 0px -.5px #9d9c9c; 
+	box-shadow: -12px 12px 0px -.5px #9d9c9c; */
+
+	-webkit-box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.39);
+	-moz-box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.39);
+	box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.39);
+
+
+	overflow: auto;
+	margin: auto;
+	
+	/* position: absolute;
+	top: 0; left: 0; bottom: 0; right: 0; */
+	/* top: 0; left: 0; bottom: 0; right: 0; */
+
+}
+
+.top-login{
+	background-color: #862633;
+}
+
+.c-brown {
+	color: #862633;
+  }
+
+.txt-bld {
+	font-family: 'kansasnewbold', sans-serif;
+	color: #862633;
+	/* font-weight: 700; */
+	/* font-size: 32px;
+	line-height: 38px; */
+  }
+
+  .txt-reg{
+	font-family: 'kansasnewregular', sans-serif;
+	color: #862633;
+	/* font-weight: 700; */
+	/* font-size: 24px;
+	line-height: 38px; */
+  }
+
+  .border-amarillo{
+	border-radius: 5px;
+	border: 2px solid #F2B33D;
+  }
+
+  .border-vino{
+	border-radius: 5px;
+	border: 2px solid #862633;
+  }
+
+
+/* .label-login {
+	font-family: 'kansasnewregular', sans-serif;
+	color: #862633;
+	font-weight: 700;
+	font-size: 16px;
+	line-height: 15px;
+	padding-top: 10px;
+  } */
+
+
+
+.help-text-login{
+	color:#e1251b
+}
+

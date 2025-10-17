@@ -1,0 +1,11 @@
+type Ranking @model @auth(rules: [{allow: public, provider: apiKey}]) {
+  id: ID!
+  username: String
+  password: String
+  type: String
+  grupo: String
+  status: Boolean
+  nombre: String
+  bookmark: String
+  avatar: Int
+}

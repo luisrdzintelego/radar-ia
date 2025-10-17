@@ -1,0 +1,261 @@
+.admin-background {
+
+	/* width: 100vw;
+	height: 100vh; */
+	min-height: 100vh;
+	/* min-width: 100vw; */
+	/* background: url('../Img/fondo_perfil_escritorio.png'); */
+	background-color: #F05A5F;
+	background-position: center center; /* Center the image */
+	background-repeat: no-repeat; /* Do not repeat the image */
+	background-size: contain; /* Resize the background image to cover the entire container */
+}
+
+.admin-form{
+
+	background-color: #fff;
+	padding: 10px;
+	border-radius: 1px;
+	/* border: 2px solid black; */
+	/* -webkit-box-shadow: 12px 12px 0px -1px #e1251b; 
+	box-shadow: 12px 12px 0px -1px #e1251b; */
+
+	/* top: 0; left: 0; bottom: 0; right: 0; */
+
+}
+
+
+/*LRG*/
+.pop_up {
+  position: fixed;
+  left: 0%;
+  top: 0%;
+  right: 0%;
+  bottom: 0%;
+  z-index: 99999;
+  display: block;
+  background-color: rgba(0, 0, 0, 0.55);
+  text-align: center;
+}
+
+.tableConfig {
+  width: 100%;
+  table-layout: fixed;
+}
+
+
+/*MODAL*/
+/* Open Modal Button */
+.open-btn {
+  padding: 12px 24px;
+  background: #007bff;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.open-btn:hover {
+  background: #0056b3;
+}
+
+.lottie_01 {
+  /* position: fixed; */
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;
+}
+
+/* Modal Content Styles */
+.modal {
+  /* background: white; */
+  padding: 30px;
+  border-radius: 10px;
+  /* max-width: 1200px;
+  max-height: 1000px; */
+  /* width: 100%; */
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: block;
+}
+
+.form-control-sm{
+  font-size: 1.1em;
+  
+}
+
+
+.sortable-header:hover {
+  background-color: #f8f9fa;
+}
+
+.sortable-header {
+  transition: background-color 0.2s;
+}
+
+
+
+.btn-editar-celda {
+  background-color: #F7A11E !important;
+  color: #ffffff !important;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-editar-celda:hover {
+  background-color: #e69500 !important;
+}
+
+.btn-borrar-celda {
+  background-color: #dc3545 !important;
+  color: #ffffff !important;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-borrar-celda:hover {
+  background-color: #c82333 !important;
+}
+
+/*customizar paginacion color */
+.page-link{
+  background-color: #fff !important;
+  color: #000 !important;
+  padding: .8px 6px !important;
+  
+}
+.page-item.active .page-link{
+  background-color: #000000 !important;
+  color: white !important;
+  
+}
+.pagination {
+  margin-top: 20px;
+}
+
+/* En Admin.css para personalizar badges */
+.badge {
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 10px;
+}
+
+.badge .fas {
+  margin-right: 4px;
+}
+
+
+/* Estados del curso con colores personalizados */
+.bg-completado { background-color: #80e30f; } /* Verde brillante - Completado */
+.bg-en-progreso { background-color: #c4c400; } /* Amarillo verdoso - En progreso */
+.bg-iniciado { background-color: #eda200; } /* Naranja - Iniciado */
+.bg-pendiente { background-color: #ff7f36; } /* Naranja rojizo - Pendiente */
+.bg-no-iniciado { background-color: #ff6361; } /* Rojo coral - No iniciado */
+
+.badge-status {
+  display: inline-block;
+  width: 120px; /* Más compacto */
+  /* width: 120px; */ /* Balanceado (recomendado) */
+  /* width: 140px; */ /* Más espacioso */
+  text-align: center;
+  font-size: 16px;
+  padding: 6px 8px;
+  border-radius: 12px;
+  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
+/* Badges personalizados para estados */
+.badge-completado {
+  background-color: #80e30f;
+  color: #000;
+  font-weight: bold;
+}
+
+/* .badge-en-progreso {
+  background-color: #c4c400;
+  color: #000;
+  font-weight: bold;
+} */
+
+.badge-en-progreso {
+  background-color: #eda200;
+  color: #000;
+  font-weight: bold;
+}
+
+.badge-iniciado {
+  background-color: #eda200;
+  color: #000;
+  font-weight: bold;
+}
+
+.badge-pendiente {
+  background-color: #ff7f36;
+  color: #000;
+  font-weight: bold;
+}
+
+/* .badge-no-iniciado {
+  background-color: #ff6361;
+  color: #000;
+  font-weight: bold;
+} */
+
+.badge-no-iniciado {
+  background-color: #d2d1d1;
+  color: #000;
+  font-weight: bold;
+}
+
+
+/* table-responsive */
+@media (max-width: 768px) {
+  .table-responsive table,
+  .table-responsive thead,
+  .table-responsive tbody,
+  .table-responsive th,
+  .table-responsive td,
+  .table-responsive tr {
+    display: block;
+  }
+  
+  .table-responsive thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+  
+  .table-responsive tr {
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 8px;
+  }
+  
+  .table-responsive td {
+    border: none;
+    position: relative;
+    padding-left: 50% !important;
+    text-align: left !important;
+  }
+  
+  .table-responsive td:before {
+    content: attr(data-label) ": ";
+    position: absolute;
+    left: 6px;
+    width: 45%;
+    font-weight: bold;
+    text-align: left;
+  }
+}
+

@@ -1,0 +1,162 @@
+[
+    {
+        "no": "1",
+        "pregunta": "Son el conjunto de malas prácticas que realiza un líder o colaborador para aprovecharse de su cargo, con el fin de violentar, abusar y afectar a otras personas, en su dignidad humana o para obtener beneficios no propios de su posición:",
+        "opcion_1": "Abuso de Autoridad",
+        "opcion_2": "Conflicto de Interés",
+        "opcion_3": "Soborno",
+        "retro": "El abuso de autoridad es un conjunto de malas prácticas que realiza un líder o colaborador para aprovecharse de su cargo, con el fin de violentar, abusar y afectar a otras personas, en su dignidad humana o para obtener beneficios no propios de su posición."
+    },
+    {
+        "no": "2",
+        "pregunta": "El acoso, violencia y hostigamiento son acciones que atentan contra la dignidad y el respeto de nuestros colaboradores.",
+        "opcion_1": "Cierto",
+        "opcion_2": "Falso",
+        "opcion_3": "",
+        "retro": "El acoso, violencia y hostigamiento son acciones que atentan contra la dignidad y el respeto de nuestros colaboradores."
+    },
+    {
+        "no": "3",
+        "pregunta": "En FEMSA respetamos a todas las personas por su individualidad y el aporte que hacen a la organización, sin discriminar a nadie por cualquier motivo, incluyendo sexo, religión, raza o preferencias:",
+        "opcion_1": "Cierto",
+        "opcion_2": "Falso",
+        "opcion_3": "",
+        "retro": "En FEMSA respetamos a todas las personas por su individualidad y el aporte que hacen a la organización, sin discriminar a nadie por cualquier motivo, incluyendo sexo, religión, raza o preferencias."
+    },
+    {
+        "no": "4",
+        "pregunta": "Es la acción de ofrecer, dar, recibir o solicitar un beneficio o recompensa de manera ilícita o no ética, con el objetivo de influir en sus decisiones o acciones, o facilitar algún servicio o trato preferente a un particular o Funcionario Público:",
+        "opcion_1": "Soborno",
+        "opcion_2": "Conflicto de Interés",
+        "opcion_3": "Abuso de autoridad",
+        "retro": "El soborno es En FEMSA respetamos a todas las personas por su individualidad y el aporte que hacen a la organización, sin discriminar a nadie por cualquier motivo, incluyendo sexo, religión, raza o preferencias."
+    },
+    {
+        "no": "5",
+        "pregunta": "Es una de las características que debe tener todo regalo que aceptamos de, u ofrecemos a, proveedores, clientes y otros terceros en nombre de FEMSA:",
+        "opcion_1": "Que sean de índole promocional, ocasional y de valor simbólico",
+        "opcion_2": "Que su valor sea menor a $150 dólares o, en su caso, al monto establecido por el negocio",
+        "opcion_3": "Que tenga la autorización previa de mi jefe inmediato",
+        "retro": "Una de las características que debe tener todo regalo que aceptamos de, u ofrecemos a, proveedores, clientes y otros terceros en nombre de FEMSA es que sean de índole promocional, ocasional y de valor simbólico."
+    },
+    {
+        "no": "6",
+        "pregunta": "Un colaborador descubre a su líder aceptando un soborno. ¿Qué debe hacer?",
+        "opcion_1": "Reportar dicho acto de forma inmediata en la Línea Ética FEMSA",
+        "opcion_2": "Compartir el hecho con sus compañeros de trabajo",
+        "opcion_3": "Quedarse callado y dejar que el hecho se descubra por sí solo",
+        "retro": "Si un colaborador descubre a su líder aceptando un soborno, debe reportar dicho acto de forma inmediata en la Línea Ética FEMSA."
+    },
+    {
+        "no": "7",
+        "pregunta": "En FEMSA, podemos ofrecer regalos a Funcionarios Públicos, siempre y cuando éstos cumplan con el Código de Ética y demás lineamientos internos aplicables:",
+        "opcion_1": "Falso",
+        "opcion_2": "Cierto",
+        "opcion_3": "",
+        "retro": "Acorde al Código de Ética, en FEMSA, no podemos ofrecer regalos a Funcionarios Públicos."
+    },
+    {
+        "no": "8",
+        "pregunta": "La corrupción es una práctica negativa que sólo sucede en el sector público, y no pueden afectar a las organizaciones privadas o a las personas que trabajan en ellas:",
+        "opcion_1": "Falso",
+        "opcion_2": "Cierto",
+        "opcion_3": "",
+        "retro": "La corrupción es una práctica negativa que sucede en diversos sectores, y pueden afectar a las organizaciones privadas o a las personas que trabajan en ellas."
+    },
+    {
+        "no": "9",
+        "pregunta": "Es uno de los mecanismos y/o controles que llevamos a cabo en FEMSA con la finalidad de mitigar las prácticas de corrupción como el soborno:",
+        "opcion_1": "Contamos con procedimientos de registro contable y administrativo para asegurar el registro de manera íntegra, correcta y oportuna",
+        "opcion_2": "Contamos con cajas chicas para cubrir pagos de emergencia",
+        "opcion_3": "Contamos un doble factor de autenticación para asegurar el correcto acceso a los sistemas",
+        "retro": "Uno de los mecanismos y/o controles que llevamos a cabo en FEMSA con la finalidad de mitigar las prácticas de corrupción como el soborno son los procedimientos de registro contable y administrativo para asegurar el registro de manera íntegra, correcta y oportuna."
+    },
+    {
+        "no": "10",
+        "pregunta": "Son ejemplo de Familiares de acuerdo con nuestra definición en Lineamientos Internos:",
+        "opcion_1": "Novia, sobrino, tío y esposa",
+        "opcion_2": "Mamá, papá, vecino y amigo",
+        "opcion_3": "Amigo, compadre, y papá",
+        "retro": "La novia, sobrino, tío y esposa son ejemplo de Familiares de acuerdo con nuestra definición en Lineamientos Internos."
+    },
+    {
+        "no": "11",
+        "pregunta": "Es un ejemplo de Conflicto de Interés Real:",
+        "opcion_1": "Participo en el proceso de selección de un proveedor, y mi amigo de la infancia forma parte de la terna",
+        "opcion_2": "Mi hermano trabaja en la misma organización, pero en diferentes negocios, entre nosotros no tenemos actividades de vigilancia, control o supervisión",
+        "opcion_3": "Tengo un segundo trabajo con una organización que no tiene vinculación con los negocios FEMSA",
+        "retro": "Un ejemplo de Conflicto de Interés real puede ser el participar en un proceso de selección de un proveedor, y mi amigo de la infancia forma parte de la terna."
+    },
+    {
+        "no": "12",
+        "pregunta": "Los Conflictos de Interés se clasifican en:",
+        "opcion_1": "Real, Potencial y Aparente",
+        "opcion_2": "Real y Potencial",
+        "opcion_3": "Real, Potencial y Posible",
+        "retro": "Los Conflictos de Interés se clasifican en Real, Potencial y Aparente."
+    },
+    {
+        "no": "13",
+        "pregunta": "Es una de las recomendaciones que debemos seguir al compartir información relacionada con FEMSA en nuestras redes sociales:",
+        "opcion_1": "Compartir materiales audiovisuales recientemente divulgados en las cuentas oficiales",
+        "opcion_2": "Etiquetar a FEMSA en la publicación",
+        "opcion_3": "Añadir nuestra información personal en la publicación",
+        "retro": "Una de las recomendaciones que debemos seguir al compartir información relacionada con FEMSA en nuestras redes sociales es etiquetar a FEMSA en la publicación"
+    },
+    {
+        "no": "14",
+        "pregunta": "Es el colaborador designado por FEMSA o sus negocios para hablar en su nombre. Transmite el propósito, visión y principios de la organización, así como mensajes clave sobre temas específicos, y está previamente capacitado por el área de Comunicación FEMSA.",
+        "opcion_1": "Vocero",
+        "opcion_2": "Director de Marketing",
+        "opcion_3": "Chief Information Security Officer (CISO)",
+        "retro": "El Vocero es el colaborador designado por FEMSA o sus negocios para hablar en su nombre. Transmite el propósito, visión y principios de la organización, así como mensajes clave sobre temas específicos, y está previamente capacitado por el área de Comunicación FEMSA."
+    },
+    {
+        "no": "15",
+        "pregunta": "La información debe ser clasificada de acuerdo con los siguientes niveles:",
+        "opcion_1": "Pública, Uso Interno, Restringida y Confidencial",
+        "opcion_2": "Pública, Relevante y de Uso Interno",
+        "opcion_3": "Pública, Privilegiada y Confidencial",
+        "retro": "La información debe ser clasificada de acuerdo con los siguientes niveles: Pública, Uso Interno, Restringida y Confidencial."
+    },
+    {
+        "no": "16",
+        "pregunta": "Son las recomendaciones que debemos seguir ante el uso de la Inteligencia Artificial:",
+        "opcion_1": "Previo a su uso, validar los requerimientos que establezcan las áreas de Seguridad de la Información y Tecnología de la Información.\n-Utilizarla de manera ética y responsable sin perjudicar, discriminar o cometer algún acto ilícito.\n-No utilizar ni procesar información de la organización en las plataformas de IA que no han sido autorizadas.",
+        "opcion_2": "Previo a su uso, validar los requerimientos que establezcan las áreas de Seguridad de la Información y Tecnología de la Información.\n-Utilizarla siempre que sea necesario, con información no comprometedora.\n-No utilizar ni procesar información de la organización en las plataformas de IA que no han sido autorizadas.",
+        "opcion_3": "Previo a su uso, validar los requerimientos que establezcan las áreas de Seguridad de la Información y Tecnología de la Información.\n-Una vez utilizada, enviar un reporte a valoración para corroborar su correcto uso.\n-No utilizar ni procesar información de la organización en las plataformas de IA que no han sido autorizadas.",
+        "retro": "Las recomendaciones que debemos seguir ante el uso de la Inteligencia Artificial son: \n-Previo a su uso, validar los requerimientos que establezcan las áreas de Seguridad de la Información y Tecnología de la Información.\n-Utilizarla de manera ética y responsable sin perjudicar, discriminar o cometer algún acto ilícito.\n-No utilizar ni procesar información de la organización en las plataformas de IA que no han sido autorizadas.\n"
+    },
+    {
+        "no": "17",
+        "pregunta": "En FEMSA, gestionamos los riesgos de seguridad de la información inherentes a nuestra operación para proteger la _____________, ________________ y ________________ de la información cuando se transmite, almacena, procesa o elimina, tanto en medios físicos como digitales.",
+        "opcion_1": "Confidencialidad, integridad y disponibilidad",
+        "opcion_2": "Integridad, seguridad y riesgos",
+        "opcion_3": "Reputación, integridad y valor",
+        "retro": "En FEMSA, gestionamos los riesgos de seguridad de la información inherentes a nuestra operación para proteger la confidencialidad, integridad y disponibilidad de la información cuando se transmite, almacena, procesa o elimina, tanto en medios físicos como digitales."
+    },
+    {
+        "no": "18",
+        "pregunta": "Es uno de nuestros valores que habla de “Hacer lo correcto ante cualquier circunstancia cuidando el impacto de nuestras acciones”:",
+        "opcion_1": "Integridad",
+        "opcion_2": "Sencillez",
+        "opcion_3": "Compromiso",
+        "retro": "La integridad es uno de nuestros valores que habla de “Hacer lo correcto ante cualquier circunstancia cuidando el impacto de nuestras acciones”."
+    },
+    {
+        "no": "19",
+        "pregunta": "Es el canal de comunicación independiente a la administración del negocio para reportar cualquier comportamiento o práctica que no se apegue a lo dispuesto en los Lineamientos Internos, leyes, o marco regulatorio aplicable en los países en los que operamos.",
+        "opcion_1": "Línea Ética",
+        "opcion_2": "Buzón de sugerencias",
+        "opcion_3": "Redes sociales",
+        "retro": "La Línea Ética es el canal de comunicación independiente a la administración del negocio para reportar cualquier comportamiento o práctica que no se apegue a lo dispuesto en los Lineamientos Internos, leyes, o marco regulatorio aplicable en los países en los que operamos."
+    },
+    {
+        "no": "20",
+        "pregunta": "Son las responsabilidades que tenemos como colaboradores de acuerdo con nuestro Código de Ética:",
+        "opcion_1": "Reportar de forma inmediata cualquier conflicto de interés\n-Conocer y cumplir con los Lineamientos Internos\n-Firmar la Carta Compromiso de cumplimiento con los Lineamientos Internos",
+        "opcion_2": "Reportar de forma inmediata cualquier conflicto de interés\n-Impedir que una persona cometa actos de conflicto de interés\n-Firmar la Carta Compromiso de la ley de conflicto de interés",
+        "opcion_3": "Reportar de forma inmediata cualquier conflicto de interés\n-Conocer y cumplir los derechos y obligaciones propios del colaborador\n-Firmar la Carta Compromiso de cumplimiento con los Lineamientos Internos",
+        "retro": "Las responsabilidades que tenemos como colaboradores de acuerdo con nuestro Código de Ética son: \n-Reportar de forma inmediata cualquier conflicto de interés\n-Conocer y cumplir con los Lineamientos Internos\n-Firmar la Carta Compromiso de cumplimiento con los Lineamientos Internos\n"
+    }
+]

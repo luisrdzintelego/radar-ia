@@ -1,0 +1,20 @@
+[
+  {
+    "Effect": "Allow",
+    "Action": [
+        "dynamodb:Query",
+        "dynamodb:PutItem", 
+        "dynamodb:Scan",
+        "dynamodb:GetItem",
+        "dynamodb:UpdateItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:BatchGetItem",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:DescribeTable"
+    ],
+    "Resource": [
+      "arn:aws:dynamodb:*:*:table/Ranking-*",
+      "arn:aws:dynamodb:*:*:table/Ranking-*/index/*"
+    ]
+  }
+]

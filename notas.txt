@@ -1,0 +1,4 @@
+Ahora podrás usar:
+npm run dev - Ejecuta cliente y servidor simultáneamente
+npm run client - Solo frontend
+npm run server - Solo backend

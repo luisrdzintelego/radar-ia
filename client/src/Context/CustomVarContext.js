@@ -1,0 +1,246 @@
+import React from 'react'
+import { useState } from "react";
+import {VarContext} from './VarContext'
+
+export const CustomVarContext = ({children}) => {
+
+	const [version, setVersion] = useState ('v25_09.29_1820')
+
+	//18sep25 - para mostrar los logs
+	const [logs, setLogs] = useState (false);
+
+	/* const iniBase = [
+		{
+			Nombre: 'Learner OXXO',
+			User: 'OLearner',
+			Avatar: '',
+			Tiempo: 0,
+			Puntos: 0,
+		  },
+		{
+			Nombre: 'Maria Guadalupe Contreras Guzman',
+			User: 'Mcontreras',
+			Avatar: '/static/media/avatar3_tumb.9173397e87a7c41e640f.png',
+			Tiempo: 34,
+			Puntos: 130,
+		  },
+		  {
+			Nombre: 'Alexa Rodriguez',
+			User: 'ARodriguez',
+			Avatar: '/static/media/avatar3_tumb.9173397e87a7c41e640f.png',
+			Tiempo: 10,
+			Puntos: 330,
+		  },
+
+		  {
+			Nombre: 'Marina Lizette Rodriguez',
+			User: 'Mrodriguez',
+			Avatar: '/static/media/avatar3_tumb.9173397e87a7c41e640f.png',
+			Tiempo: 50,
+			Puntos: 330,
+		  },
+
+		  {
+			Nombre: 'Ximena Guadalupe Rodriguez Contreras',
+			User: 'Xcontreras',
+			Avatar: '/static/media/avatar3_tumb.9173397e87a7c41e640f.png',
+			Tiempo: 20,
+			Puntos: 200,
+		  },
+		  {
+			Nombre: 'Romina Rodriguez Contreras',
+			User: 'Rcontreras',
+			Avatar: '/static/media/avatar3_tumb.9173397e87a7c41e640f.png',
+			Tiempo: 15,
+			Puntos: 330,
+		  },
+		  {
+			Nombre: 'Luis Eduardo Rodriguez Garcia',
+			User: 'Lrodriguez',
+			Avatar: '/static/media/avatar3_tumb.9173397e87a7c41e640f.png',
+			Tiempo: 20,
+			Puntos: 380,
+		  },
+		  {
+			Nombre: 'Ernesto Contreras',
+			User: 'Econtreras',
+			Avatar: '/static/media/avatar3_tumb.9173397e87a7c41e640f.png',
+			Tiempo: 30,
+			Puntos: 380,
+		  },
+		  
+	] */
+	
+	//const [Base, setBase] = useState(() => iniBase)
+
+	//VARIABLES DEL JUEGO
+	const [TotalAvance, setTotalAvance] = useState (10)
+	const [ConteoAvance, setConteoAvance] = useState (0)
+
+	//2025v8 - pruebas es para poder monstar en la seccion de curso en pantalla lo que mmuestra la base de datos.
+	const [pruebas, setPruebas] = useState (false);
+
+	const [bookmark, setBookmark] = useState ('')
+	const [status, setStatus] = useState (false)
+
+
+	//----
+
+	//DATOA DE SE LLENAN DE LA BASE
+	const [userId, setUserId] = useState ('')
+	const [username, setUsername] = useState ('')
+	const [password, setPassword] = useState ('')
+	const [nombre, setNombre] = useState ('')
+	const [grupo, setGrupo] = useState ('')
+	const [type, setType] = useState ('')
+
+	//const [avatar, setAvatar] = useState ('')
+	/* const [Puntos, setPuntos] = useState (0)
+	const [Tiempo, setTiempo] = useState (0
+	const [Joya1, setJoya1] = useState (false)
+	const [Joya2, setJoya2] = useState (false)
+	const [Joya3, setJoya3] = useState (false)
+	const [Bonus1, setBonus1] = useState (false)
+	const [Bonus2, setBonus2] = useState (false)
+	const [Bonus3, setBonus3] = useState (false) 
+	const [ranking, setRanking] = useState (0)*/
+
+
+	
+	// DATOS DE EL JUEGO PERO NO VAN A LA ABSE
+	/* const [PuntosEval1, setPuntosEval1] = useState (0)
+	const [PuntosEval2, setPuntosEval2] = useState (0)
+	const [PuntosEval3, setPuntosEval3] = useState (0)
+	const [TiempoEval1, setTiempoEval1] = useState (0)
+	const [TiempoEval2, setTiempoEval2] = useState (0)
+	const [TiempoEval3, setTiempoEval3] = useState (0)
+	const [Bonus, setBonus] = useState (false)
+	const [Counter, setCounter] = useState (0) */
+
+
+
+    //console.log("🚀 ~ UrlImg", UrlImg)
+
+	const [productosCart, setProductosCart] = useState ([])
+
+	/*
+	const resetAll2 = (var1) => {
+		setNombre(var1)
+		console.log("🚀 ~ Nombre", var1)
+	}
+	*/
+
+	const resetAll = () => {
+		 setBookmark('')
+		//setStatus(false)
+		setUserId('')
+		setUsername('')
+		setPassword('')
+		setNombre('')
+		setGrupo('')
+		setType('')
+		//setAvatar(false)
+		//pone el conteo del avancer en 0
+		//setConteoAvance(0)
+
+		console.log("🚀 ~ resetAll")
+	}
+
+	
+
+	const addItem = (id,nombre,precio,img,cantidad) => {
+
+		if (!isInCart(id)) {
+			const Item = {
+				//item:{//},
+				id, nombre, precio, img, cantidad
+			}
+			setProductosCart([...productosCart, Item])
+        } else {
+
+			setProductosCart( productosCart.map(prod => (prod.id === id ? {...prod, cantidad: (prod.cantidad+cantidad)}: prod)))
+
+		}
+
+	}
+	
+	const removeItem = (itemId) => {
+		setProductosCart( productosCart.filter((producto) => producto.id !== itemId) )
+	}
+
+	const vaciarCart = () => {
+		setProductosCart([])
+	}
+
+    const cantidadCart = () => {
+		return productosCart.reduce((acc, prod) => acc + prod.cantidad, 0)
+	}
+  
+	const totalCart = () => {
+		return productosCart.reduce((acc, prod) => acc + prod.cantidad * prod.precio, 0)
+	}
+
+    const isInCart = (id) => {
+		return productosCart.some((prod) => prod.id === id)
+	}
+
+	const sumarItem = (id) => {
+		setProductosCart( productosCart.map(prod => (prod.id === id ? {...prod, cantidad: (prod.cantidad+1)}: prod)))
+	}
+
+	const restarItem = (id) => {
+		setProductosCart( productosCart.map(prod => (prod.id === id ? {...prod, cantidad: (prod.cantidad-1)}: prod)))
+	}
+
+  return (
+	<VarContext.Provider value={{
+		//--
+		logs,setLogs,
+		TotalAvance,setTotalAvance,ConteoAvance,setConteoAvance,
+		//--
+		userId,setUserId,
+		username,setUsername,
+		password,setPassword,
+		nombre,setNombre,
+		grupo,setGrupo,
+		type,setType,
+		version,setVersion,
+		//avatar,setAvatar,
+		/* Puntos,setPuntos,
+		Tiempo,setTiempo,
+		Joya1,setJoya1,
+		Joya2,setJoya2,
+		Joya3,setJoya3,
+		Bonus1,setBonus1,
+		Bonus2,setBonus2,
+		Bonus3,setBonus3, */
+		bookmark, setBookmark,
+		status,setStatus,
+		/* ranking,setRanking, */
+		resetAll,
+		//TEST-
+		pruebas, setPruebas,
+		//Base,setBase,
+		//--NO SE USAN
+		/* Bonus,setBonus,
+		PuntosEval1,setPuntosEval1,
+		PuntosEval2,setPuntosEval2,
+		PuntosEval3,setPuntosEval3,
+		TiempoEval1,setTiempoEval1,
+		TiempoEval2,setTiempoEval2,
+		TiempoEval3,setTiempoEval3,
+		Counter,setCounter, */
+		//NOSE USAN
+		productosCart, 
+		addItem, 
+		removeItem, 
+		vaciarCart, 
+		isInCart, 
+		totalCart, 
+		cantidadCart, 
+		restarItem, 
+		sumarItem  }}>
+		{children}
+	</VarContext.Provider>
+  )
+}
