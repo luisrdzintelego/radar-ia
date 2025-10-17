@@ -1,5 +1,6 @@
 {
-    "name": "jedi-app",
+    "name": "radar-ia",
+    "homepage": "https://intelego.com.mx/tools",
     "version": "0.1.0",
     "private": true,
     "dependencies": {
