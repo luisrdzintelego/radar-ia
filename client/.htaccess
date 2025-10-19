@@ -1,4 +1,20 @@
 Options -MultiViews
-RewriteEngine On
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^ index.html [QSA,L]
+
+<IfModule mod_rewrite.c>
+  <IfModule mod_proxy.c>
+    RewriteEngine On
+    ProxyPreserveHost Off
+    
+    # PRIMERO: Proxy para API
+    RewriteRule ^api/(.*)$ http://radar-ia-env.eba-tkuneqkw.us-east-1.elasticbeanstalk.com/$1 [P,L]
+    
+    # DESPUÉS: SPA routing para React
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.html [QSA,L]
+  </IfModule>
+</IfModule>
+
+# Fallback si no hay mod_rewrite
+<IfModule !mod_rewrite.c>
+  ErrorDocument 404 /index.html
+</IfModule>

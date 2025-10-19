@@ -50,7 +50,7 @@
 
           //Para forzar que vengan desde una url conocida
           //PRODUCTIVO
-        if (event.origin === "https://www.femsa-jedi.com" || event.origin === "https://femsa-jedi.com") {
+        if (event.origin === "https://www.intelego.com.mx" || event.origin === "https://intelego.com.mx") {
           //DEV
           //if (event.origin === "https://v2jun25.dom3q6kqz6u4e.amplifyapp.com") {  
 
