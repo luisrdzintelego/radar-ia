@@ -29,37 +29,10 @@ import RankingBoard from "./Secciones/RankingBoard"; */
 import Admin from "./Secciones/Admin";
 import NotFound from './Secciones/NotFound'; // Crea este componente para el 404
 
-
-
-/*
-import { I18n } from 'aws-amplify';
-import { Authenticator, translations } from '@aws-amplify/ui-react';
-import '@aws-amplify/ui-react/styles.css';
-
-//poner en español el login
-I18n.putVocabularies(translations);
-I18n.setLanguage('es');
-
-I18n.putVocabularies({
-  fr: {
-    'Sign In': 'Se connecter',
-    'Sign Up': "S'inscrire",
-  },
-  es: {
-    'Sign In': 'Registrarse',
-    'Sign Up': 'Regístrate',
-  },
-});
-*/
-
-
-
-
 function App() {
 
   const GConText = useContext(VarContext);
   
-
   return (
 
     <>
