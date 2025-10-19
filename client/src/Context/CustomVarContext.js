@@ -4,7 +4,7 @@ import {VarContext} from './VarContext'
 
 export const CustomVarContext = ({children}) => {
 
-	const [version, setVersion] = useState ('v25_10.19_0150')
+	const [version, setVersion] = useState ('v25_10.19_0209')
 
 	//18sep25 - para mostrar los logs
 	const [logs, setLogs] = useState (false);
