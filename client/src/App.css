@@ -1,3 +1,14 @@
+:root {
+	--azul-intelego: #211f3d;
+	--verde-intelego: #35C055;
+  
+	--intelego-blue: #5CA0D3;
+	--intelego-coral: #FF7B6B;
+	--intelego-green: #4CAF50;
+	--intelego-amber: #FFC107;
+}
+
+
 .App {
   text-align: center;
 }

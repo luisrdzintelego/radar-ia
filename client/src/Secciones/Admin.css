@@ -5,7 +5,7 @@
 	min-height: 100vh;
 	/* min-width: 100vw; */
 	/* background: url('../Img/fondo_perfil_escritorio.png'); */
-	background-color: #F05A5F;
+	background: linear-gradient(135deg, #b1f6c1 0%, #35C055 100%);
 	background-position: center center; /* Center the image */
 	background-repeat: no-repeat; /* Do not repeat the image */
 	background-size: contain; /* Resize the background image to cover the entire container */

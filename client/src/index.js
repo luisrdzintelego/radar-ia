@@ -6,63 +6,6 @@ import reportWebVitals from './reportWebVitals';
 //import { CookiesProvider } from 'react-cookie';
 //aws configuración
 
-import { Amplify } from 'aws-amplify';
-//import config from './aws-exports';
-
-
-const config = {
-  aws_project_region: process.env.REACT_APP_AWS_PROJECT_REGION,
-  aws_appsync_graphqlEndpoint: process.env.REACT_APP_APPSYNC_ENDPOINT,
-  aws_appsync_region: process.env.REACT_APP_AWS_PROJECT_REGION,
-  aws_appsync_authenticationType: 'API_KEY',
-  aws_appsync_apiKey: process.env.REACT_APP_APPSYNC_API_KEY,
-
-  // Configuración de DataStore
-  //aws_dynamodb_all_tables_region: process.env.REACT_APP_AWS_PROJECT_REGION,
-  //aws_dynamodb_table_schemas: [
-  //  {
-  //    tableName: "Ranking", // Tu tabla
-  //    region: process.env.REACT_APP_AWS_PROJECT_REGION
-  //  }
-  //]
-
-};
-
-Amplify.configure(config);
-
-// Agregar headers personalizados después
-/* Amplify.configure({
-  ...config,
-  API: {
-    GraphQL: {
-      endpoint: process.env.REACT_APP_APPSYNC_ENDPOINT,
-      region: process.env.REACT_APP_AWS_PROJECT_REGION,
-      defaultAuthMode: 'apiKey',
-      apiKey: process.env.REACT_APP_APPSYNC_API_KEY,
-      headers: async () => {
-        const token = sessionStorage.getItem('accessToken');
-        return {
-          'Authorization': token ? `Bearer ${token}` : '',
-          'X-Content-Type-Options': 'nosniff',
-          'X-Frame-Options': 'DENY'
-        };
-      }
-    }
-  }
-}); */
-
-//import { Amplify } from 'aws-amplify';
-
-/* Amplify.configure({
-  API: {
-    GraphQL: {
-      endpoint: 'https://34hjs5sszjfvtded3bu3bbn3pe.appsync-api.us-east-1.amazonaws.com/graphql',
-      region: 'us-east-1',
-      defaultAuthMode: 'apiKey',
-      apiKey: 'da2-nzfqq2gpfrbzfczrcwpqksib7a'
-    }
-  }
-}); */
 
 // Solo para producción
 /* if (process.env.NODE_ENV === 'production') {

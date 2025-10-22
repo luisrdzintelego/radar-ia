@@ -4,7 +4,7 @@ import { Link, Navigate, useNavigate } from 'react-router-dom';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 //import { faEdit, faTrash, faSave, faUpload, faDownload, faFileArrowDown, faFileExport } from '@fortawesome/free-solid-svg-icons'
-import { faEyeSlash, faEye, faSpinner } from '@fortawesome/free-solid-svg-icons'
+import { faEyeSlash, faEye,  } from '@fortawesome/free-solid-svg-icons'
 
 
 import '../fonts/fonts.css'
@@ -31,14 +31,14 @@ const Login = ({ props }) => {
 	const redirectUser = (userType) => {
 		const routes = {
 			'admin': '/admin',
-			'user': '/dashboard'
+			'user': '/introduccion'
 		};
 
 		//const route = routes[userType] || '/introduccion'; // Default a usuario normal
 		//navigate(route, { replace: true }); // replace: true evita volver atrás
 
 		//mas eficiente
-		navigate(routes[userType] || '/dashboard', { replace: true });
+		navigate(routes[userType] || '/introduccion', { replace: true });
 
 	};
 
@@ -462,84 +462,150 @@ const togglePasswordVisibility = () => {
 		</div>
 	);
 	}
-return (
-  <div className="login-background">
-    <div className="login-form">
-      {/* Logo */}
-      <div className="logo-container">
-        <img src={Img.Logo_rojo} alt="Logo" width="200" className="mb-3" />
-        {/* <img src={Img.Logo} alt="Radar IA" width="180" /> */}
-      </div>
+	return (
+		<>
+			{/* <div className="container fondo-rosa" style={{ backgroundImage: `url(${background})` }}> */}
+			<div className="container login-background">
 
-      {/* Título */}
-      <h2 className="login-title">Iniciar Sesión</h2>
+				{/* <Nav titulo={"login"}></Nav> */}
 
-      {/* Mensajes de error */}
-      {(errorLogin || isBlocked) && (
-        <div className="error-message">
-          {errorMessage || blockMessage}
-        </div>
-      )}
+				<span className='oro fs-10 position-absolute bottom-0 end-0 p-1'>{GConText.version}</span>
 
-      {/* Campo de usuario */}
-      <div className="input-group">
-        <label className="input-label">Correo Electrónico</label>
-        <input
-          type="text"
-          onChange={UserChange}
-          ref={userInput}
-          onKeyDown={handleKeyDown}
-          className="form-control-login"
-          placeholder="Ingresa tu usuario"
-        />
-      </div>
+				<div className="LoginForm">
+					<div className="col-12 col-lg-8 offset-lg-2 col-md-8 offset-md-2 col-sm-8 offset-sm-2">
+						<div className='login-form'>
 
-	  {/* Campo de contraseña */}
-	  <div className="input-group">
-	    <label className="input-label">Contraseña</label>
-	    <div className="password-input-container">
-	      <input
-	        type={showPassword ? "text" : "password"}
-	        onChange={PassChange}
-	        ref={passInput}
-	        onKeyDown={handleKeyDown}
-	        className="form-control-login"
-	        placeholder="Ingresa tu contraseña"
-	      />
-	      <button
-	        type="button"
-	        onClick={togglePasswordVisibility}
-	        className="password-toggle"
-	      >
-	        <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
-	      </button>
-	    </div>
-	  </div>
+							<div className="col-12">
+								<div className="d-flex justify-content-around pt-4">
+									<img src={Img.Logo_rojo} alt="" width="100"></img>
+								</div>
+							</div>
+
+							{/* <div className="col-6">
+								<div className="pt-4 pb-2">
+								</div>
+							</div> */}
+
+							<div className="col-12 top-login">
+								<div className="mt-5 c-brown txt-bld fs-32 lh-35 p-2">
+									<img src={Img.Logo} alt="" width="200"></img>
+								</div>
+							</div>
+
+							<div className="col-12 c-brown txt-reg fs-24">
+								<div className="mt-4 text-login">
+									Iniciar sesión
+								</div>
+							</div>
+
+							<div className="mt-3">
+								<div className="container">
+									<div className="row">
+										<div className="col-6 offset-1 col-md-6 offset-md-1 col-sm-6 offset-sm-1 text-left ">
+											<label className="c-brown txt-bld fs-12">Correo Electrónico:</label>
+										</div>
+										<div className="col-4 col-md-4 col-sm-4 text-right align-self-center ">
+											{/* <span style={{ display: user === false && verImg === true ? 'block' : 'none' }} className="fs-10 c-rojo">Usuario no existe</span> */}
+										</div>
+
+										<div className='col-10 offset-1 align-self-center border-vino text-center'>
+											<div className='row'>
+												<div className="col-12 col-sm-10 col-md-10 align-self-center text-center ">
+													<input type="text" onChange={UserChange} ref={userInput} onKeyDown={handleKeyDown} className="fs-16 form-control-login" placeholder="Usuario"></input>
+												</div>
+												<div className="d-none d-sm-block col-sm-2 col-md-2 align-self-center text-center ">
+													{/* <img src={user === false ? Img.mal : Img.bien} style={{ display: verImg === true ? 'block' : 'none' }} alt="retro" width="30"></img> */}
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
 
 
-      {/* Botón de login */}
-      <button
-        className="btn-login"
-        onClick={chkLogin}
-        disabled={isLoading || !isFormValid}
-      >
-        {isLoading ? (
-          <>
-            <FontAwesomeIcon icon={faSpinner} spin className="me-2" />
-            Ingresando...
-          </>
-        ) : (
-          'Ingresar'
-        )}
-      </button>
-    </div>
+							<div className="mt-3">
+								<div className="container">
+									<div className="row">
+										<div className="col-6 offset-1 col-md-6 offset-md-1 col-sm-6 offset-sm-1 text-left ">
+											<label className="c-brown txt-bld fs-12">Contraseña:</label>
+										</div>
+										<div className="col-4 col-md-4 col-sm-4 text-right align-self-center ">
+											{/* <span style={{ display: pass === false && verImg === true ? 'block' : 'none' }} className="fs-10 c-rojo">Contraseña incorrecta</span> */}
+										</div>
 
-    {/* Badge de versión */}
-    <div className="version-badge">
-      v{GConText.version}
-    </div>
-  </div>
-);
+										<div className='col-10 offset-1 align-self-center border-vino text-center'>
+										  <div className='row'>
+										    <div className="col-10 col-sm-10 col-md-10 align-self-center text-center">
+										      <input 
+										        type={showPassword ? "text" : "password"} 
+										        onChange={PassChange} 
+										        ref={passInput} 
+										        onKeyDown={handleKeyDown} 
+										        className="fs-16 form-control-login" 
+										        placeholder="Contraseña"
+										      />
+										    </div>
+										    <div className="col-2 col-sm-2 col-md-2 align-self-center text-center">
+										      <button 
+										        type="button"
+										        onClick={togglePasswordVisibility}
+										        className="btn btn-link p-0"
+										        style={{ border: 'none', background: 'none', color: '#8B4513' }}
+										      >
+												<FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+										      </button>
+										    </div>
+										  </div>
+										</div>
+										{/* <div className='col-10 offset-1 align-self-center border-vino text-center'>
+											<div className='row'>
+												<div className="col-12 col-sm-10 col-md-10 align-self-center text-center ">
+													<input type="password" onChange={PassChange} ref={passInput} onKeyDown={handleKeyDown} className="fs-16  form-control-login" placeholder="Contraseña"></input>
+												</div>
+											</div>
+										</div> */}
+									</div>
+								</div>
+							</div>
 
+							<div className="py-3">
+								{/* ✨ Mensaje de error login */}
+								<span style={{ display: errorLogin ? 'block' : 'none' }} className="fs-18 py-3 c-rojo">
+									{errorMessage}
+								</span>
+								{/* ✨ Mensaje de bloqueo/timeout */}
+								<div style={{ display: isBlocked ? 'block' : 'none' }} className="fs-18 py-3 c-rojo">
+									{blockMessage}
+								</div>
+
+								<span
+									className={`btn bg-amarillo ${!isFormValid ? 'disabled' : ''}`}
+									onClick={isFormValid ? chkLogin : null}
+									style={{
+										pointerEvents: (isLoading || !isFormValid) ? 'none' : 'auto',
+										opacity: !isFormValid ? 0.6 : 1
+									}}
+									disabled={isLoading || !isFormValid}
+								>{isLoading ? (
+									<>
+										<span className="spinner-border spinner-border-sm me-2" role="status"></span>
+										Ingresando...
+									</>
+								) : (
+									'Ingresar'
+								)}</span>
+							</div>
+
+							{/* <div className="col-12 col-md-12 mt-4">
+								<Link  to="/ranking" ><h1 className='fs-18 c-rojo'>Ver Ranking</h1></Link>
+							</div>	 */}
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</>
+
+	)
 }
 export default Login

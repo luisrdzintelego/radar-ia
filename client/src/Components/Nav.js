@@ -12,9 +12,9 @@ import { faCheckCircle, faSpinner, faTimesCircle } from '@fortawesome/free-solid
 import './Nav.css';
 import * as Img from '../Components/Imagenes'
 
-import Logo_femsa from "../Img/femsa/logo_femsa_bco.png"
-import Logo_universidad from "../Img/femsa/logo_universidad.png"
-import logo_universidad_movil from "../Img/femsa/logo_universidad_movil.png"
+import Logo from "../Img/logo/logo.png"
+import Logo_universidad from "../Img/logo/logo_universidad.png"
+import logo_universidad_movil from "../Img/logo/logo_universidad_movil.png"
 
 //para logout
 import { logout } from '../utils/auth';
@@ -56,7 +56,7 @@ const Nav = ({ titulo, btn_admin, btn_dash, curso, userStatus }) => {
 						<div className="row hr" style={{ padding: '10px' }}>
 
 							<div className="col-6 col-md-6 text-left">
-								<img src={Logo_femsa} alt="" className='logo'></img>
+								<img src={Logo} alt="" className='logo'></img>
 							</div>
 							<div className="col-6 col-md-6 text-right">
 								<img src={Logo_universidad} alt="" className='logo_universidad'></img>
@@ -70,7 +70,7 @@ const Nav = ({ titulo, btn_admin, btn_dash, curso, userStatus }) => {
 						<div className="row" style={{ padding: '10px' }}>
 
 							<div className="col-3 col-md-3 align-self-center text-left">
-								<img src={Logo_femsa} alt="" className='logo'></img>
+								<img src={Logo} alt="" className='logo'></img>
 							</div>
 
 							<div className={`col-7 col-md-7 align-self-center text-center flex justify-content-around`}>

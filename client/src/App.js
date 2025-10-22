@@ -15,9 +15,10 @@ import './App.css';
 
 import Login from './Secciones/Login';
 import Introduccion from "./Secciones/Introduccion";
+import Dashboard from "./Secciones/Dashboard";
+import AdminAnalytics from "./Components/AdminAnalytics";
 /*import Perfil from "./Secciones/Perfil";
  import Instrucciones from "./Secciones/Instrucciones";
-import Dashboard from "./Secciones/Dashboard";
 import Primer_reto from "./Secciones/Primer_reto";
 import Quiz1 from "./Secciones/Quiz1";
 import Segundo_reto from "./Secciones/Segundo_reto";
@@ -62,9 +63,11 @@ function App() {
           <Routes>
           <Route exact path="/" element={<Login />} />
           <Route path="introduccion" element={<Introduccion/>}/>
+          <Route path="dashboard" element={<Dashboard/>}/>
+          <Route path="/admin/analytics" element={<AdminAnalytics />} />
           {/* <Route path="perfil" element={<Perfil/>}/>
           <Route path="instrucciones" element={<Instrucciones/>}/>
-          <Route path="dashboard" element={<Dashboard/>}/>
+          
           <Route path="primer_reto" element={<Primer_reto/>}/>
           <Route path="quiz1" element={<Quiz1/>}/>
           <Route path="segundo_reto" element={<Segundo_reto/>}/>

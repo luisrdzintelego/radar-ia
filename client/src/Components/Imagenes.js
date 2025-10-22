@@ -7,10 +7,10 @@ import fondo_login from "../Img/JEDI/fondo.png"
 import Logo from "../Img/JEDI/logo.png"
 
 /*JEDI*/
-import Logo_femsa_bco from "../Img/femsa/logo_femsa_bco.png"
-import Logo_femsa_rojo from "../Img/femsa/logo_femsa_rojo.png"
-import Logo_universidad from "../Img/femsa/logo_universidad.png"
-import logo_universidad_movil from "../Img/femsa/logo_universidad_movil.png"
+import Logo_bco from "../Img/logo/logo.png"
+import Logo_rojo from "../Img/logo/logo.png"
+import Logo_universidad from "../Img/logo/logo_universidad.png"
+import logo_universidad_movil from "../Img/logo/logo_universidad_movil.png"
 /* import Logo_jedi from "../Img/JEDI/logo_jedi.png" */
 
 
@@ -37,7 +37,7 @@ export {
 	no_avatar,
 	fizq, fder,
 	star,reloj,
-	Logo_femsa_bco,Logo_femsa_rojo,Logo_universidad,logo_universidad_movil,Logo,
+	Logo_bco,Logo_rojo,Logo_universidad,logo_universidad_movil,Logo,
 	fondo_login,spinner
 	}
 

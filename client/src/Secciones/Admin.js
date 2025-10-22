@@ -33,11 +33,15 @@ import { saveAs } from 'file-saver';
 
 import { logout } from '../utils/auth';
 
-
+import AdminAnalytics from '../Components/AdminAnalytics';
 
 const Admin = () => {
 
-    const GConText = useContext(VarContext);
+  const GConText = useContext(VarContext);
+
+  // Agregar estado para controlar la vista
+  const [showAnalytics, setShowAnalytics] = useState(true);
+
   //para migrar las contraseñas planas a bcrypt
   /* const migrarPasswords = async () => {
     const usuarios = await DataStore.query(Ranking);
@@ -178,326 +182,326 @@ const Admin = () => {
     return await response.json();
   };
 
-const handleTokenExpiration = (response) => {
-  if (GConText.logs) console.log('🔍 Verificando token - Status:', response.status);
-  
-  if (response.status === 401 || response.status === 403) {
-    if (GConText.logs) console.log('🔒 Token expirado detectado - Ejecutando logout');
-    
-    showToast.error("⚠️ SESIÓN EXPIRADA - Cerrando sesión automáticamente", {
-      duration: 2000
-    });
-    
-    // Limpiar almacenamiento
-    if (GConText.logs) console.log('🧹 Limpiando almacenamiento...');
-    sessionStorage.clear();
-    localStorage.clear();
-    
-    // Limpiar contexto
-    if (GConText && GConText.resetAll) {
-      GConText.resetAll();
+  const handleTokenExpiration = (response) => {
+    if (GConText.logs) console.log('🔍 Verificando token - Status:', response.status);
+
+    if (response.status === 401 || response.status === 403) {
+      if (GConText.logs) console.log('🔒 Token expirado detectado - Ejecutando logout');
+
+      showToast.error("⚠️ SESIÓN EXPIRADA - Cerrando sesión automáticamente", {
+        duration: 2000
+      });
+
+      // Limpiar almacenamiento
+      if (GConText.logs) console.log('🧹 Limpiando almacenamiento...');
+      sessionStorage.clear();
+      localStorage.clear();
+
+      // Limpiar contexto
+      if (GConText && GConText.resetAll) {
+        GConText.resetAll();
+      }
+
+      // ✨ Logout INMEDIATO sin setTimeout
+      if (GConText.logs) console.log('🚪 Ejecutando logout inmediato...');
+      logout();
+
+      return true; // Indica que el token expiró
     }
-    
-    // ✨ Logout INMEDIATO sin setTimeout
-    if (GConText.logs) console.log('🚪 Ejecutando logout inmediato...');
-    logout();
-    
-    return true; // Indica que el token expiró
-  }
-  return false; // Token válido
-};
-
-// Función temporal para testing (eliminar después)
-const testTokenExpiration = () => {
-  if (GConText.logs) console.log('🧪 Probando manejo de token expirado...');
-  handleTokenExpiration({ status: 401 });
-};
-// Hacer la función accesible globalmente para testing
-useEffect(() => {
-  if (GConText.logs) {
-    window.testTokenExpiration = testTokenExpiration;
-    return () => {
-      delete window.testTokenExpiration;
-    };
-  }
-}, [GConText.logs]);
-
-
-const debugTokenInfo = () => {
-  const token = sessionStorage.getItem('accessToken');
-  
-  if (!token) {
-    if (GConText.logs) console.log('🔒 No hay token disponible');
-    return;
-  }
-
-  try {
-    // Decodificar el JWT (solo la parte del payload)
-    const payload = JSON.parse(atob(token.split('.')[1]));
-    
-    const now = Math.floor(Date.now() / 1000); // Tiempo actual en segundos
-    const exp = payload.exp; // Tiempo de expiración del token
-    const iat = payload.iat; // Tiempo de emisión del token
-    
-    const timeLeft = exp - now; // Tiempo restante en segundos
-    const totalTime = exp - iat; // Tiempo total de vida del token
-    
-    if (GConText.logs)  console.log('🔐 === DEBUG TOKEN INFO ===');
-    if (GConText.logs)  console.log('📅 Emitido:', new Date(iat * 1000).toLocaleString());
-    if (GConText.logs)  console.log('⏰ Expira:', new Date(exp * 1000).toLocaleString());
-    if (GConText.logs)  console.log('⏳ Tiempo restante:', timeLeft > 0 ? `${Math.floor(timeLeft / 60)}m ${timeLeft % 60}s` : 'EXPIRADO');
-    if (GConText.logs)  console.log('📊 Progreso:', `${Math.round(((totalTime - timeLeft) / totalTime) * 100)}%`);
-    if (GConText.logs)  console.log('👤 Usuario:', payload.username || payload.sub || 'N/A');
-    if (GConText.logs)  console.log('🎭 Rol:', payload.type || payload.role || 'N/A');
-    if (GConText.logs)  console.log('🔐 === FIN DEBUG TOKEN ===');
-    
-    // Advertencia si queda poco tiempo
-    if (timeLeft < 300 && timeLeft > 0) { // Menos de 5 minutos
-      console.warn('⚠️ TOKEN EXPIRARÁ PRONTO:', `${Math.floor(timeLeft / 60)}m ${timeLeft % 60}s`);
-    }
-    
-  } catch (error) {
-    console.error('❌ Error decodificando token:', error);
-  }
-};
-
-useEffect(() => {
-  if (GConText.logs) {
-    // Debug inicial
-    debugTokenInfo();
-    
-    // Debug cada 5 minutos
-    const interval = setInterval(debugTokenInfo, 5 * 60 * 1000);
-    
-    return () => clearInterval(interval);
-  }
-}, [GConText.logs]);
-
-// Crear un wrapper para todas las llamadas API:
-//funcion para el manejo de tokens expirado
-const apiCall = async (url, options = {}) => {
-  const token = sessionStorage.getItem('accessToken');
-  
-  const defaultOptions = {
-    headers: {
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json',
-      ...options.headers
-    },
-    credentials: 'include',
-    ...options
+    return false; // Token válido
   };
 
-  try {
-    const response = await fetch(url, defaultOptions);
-    
-    // ✨ Verificar token expirado en todas las llamadas
-    if (handleTokenExpiration(response)) {
-      throw new Error('Token expirado');
+  // Función temporal para testing (eliminar después)
+  const testTokenExpiration = () => {
+    if (GConText.logs) console.log('🧪 Probando manejo de token expirado...');
+    handleTokenExpiration({ status: 401 });
+  };
+  // Hacer la función accesible globalmente para testing
+  useEffect(() => {
+    if (GConText.logs) {
+      window.testTokenExpiration = testTokenExpiration;
+      return () => {
+        delete window.testTokenExpiration;
+      };
+    }
+  }, [GConText.logs]);
+
+
+  const debugTokenInfo = () => {
+    const token = sessionStorage.getItem('accessToken');
+
+    if (!token) {
+      if (GConText.logs) console.log('🔒 No hay token disponible');
+      return;
     }
 
-    return response;
-  } catch (error) {
-    console.error('Error en API call:', error);
-    throw error;
-  }
-};
+    try {
+      // Decodificar el JWT (solo la parte del payload)
+      const payload = JSON.parse(atob(token.split('.')[1]));
 
-//version con 5 estados
-/* const getCourseStatus = (user) => {
-  if (!user.bookmark || user.bookmark === '' || user.bookmark === 'empty') {
-    return 'no-iniciado';
-  }
+      const now = Math.floor(Date.now() / 1000); // Tiempo actual en segundos
+      const exp = payload.exp; // Tiempo de expiración del token
+      const iat = payload.iat; // Tiempo de emisión del token
 
-  try {
-    // Split por '&&' para obtener las secciones
-    const bookmarkParts = user.bookmark.split('&&');
-    const laminasString = bookmarkParts[0]; // "1-0-0-0|1-0-0-0|1-0-0-0|1-0-0-0|1-0-0-0"
-    
-    if (!laminasString) return 'no-iniciado';
-    
-    // Split por '|' para obtener cada lámina
-    const laminas = laminasString.split('|');
-    
-    let totalLaminas = 0;
-    let laminasCompletadas = 0;
-    let laminasIniciadas = 0;
-    
-    laminas.forEach(lamina => {
-      if (lamina) {
-        totalLaminas++;
-        const primerNumero = parseInt(lamina.charAt(0));
-        
-        if (primerNumero === 3) {
-          laminasCompletadas++;
-        } else if (primerNumero > 1) {
-          laminasIniciadas++;
-        }
+      const timeLeft = exp - now; // Tiempo restante en segundos
+      const totalTime = exp - iat; // Tiempo total de vida del token
+
+      if (GConText.logs) console.log('🔐 === DEBUG TOKEN INFO ===');
+      if (GConText.logs) console.log('📅 Emitido:', new Date(iat * 1000).toLocaleString());
+      if (GConText.logs) console.log('⏰ Expira:', new Date(exp * 1000).toLocaleString());
+      if (GConText.logs) console.log('⏳ Tiempo restante:', timeLeft > 0 ? `${Math.floor(timeLeft / 60)}m ${timeLeft % 60}s` : 'EXPIRADO');
+      if (GConText.logs) console.log('📊 Progreso:', `${Math.round(((totalTime - timeLeft) / totalTime) * 100)}%`);
+      if (GConText.logs) console.log('👤 Usuario:', payload.username || payload.sub || 'N/A');
+      if (GConText.logs) console.log('🎭 Rol:', payload.type || payload.role || 'N/A');
+      if (GConText.logs) console.log('🔐 === FIN DEBUG TOKEN ===');
+
+      // Advertencia si queda poco tiempo
+      if (timeLeft < 300 && timeLeft > 0) { // Menos de 5 minutos
+        console.warn('⚠️ TOKEN EXPIRARÁ PRONTO:', `${Math.floor(timeLeft / 60)}m ${timeLeft % 60}s`);
       }
-    });
-    
-    // Calcular porcentaje de progreso
-    const porcentajeCompletado = totalLaminas > 0 ? (laminasCompletadas / totalLaminas) * 100 : 0;
-    const porcentajeIniciado = totalLaminas > 0 ? ((laminasCompletadas + laminasIniciadas) / totalLaminas) * 100 : 0;
-    
-    // Determinar estado basado en el progreso
-    if (porcentajeCompletado === 100) {
-      return 'completado';
-    } else if (porcentajeCompletado >= 80) {
-      return 'en-progreso';
-    } else if (porcentajeCompletado >= 40) {
-      return 'iniciado';
-    } else if (porcentajeIniciado > 0) {
-      return 'pendiente';
-    } else {
+
+    } catch (error) {
+      console.error('❌ Error decodificando token:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (GConText.logs) {
+      // Debug inicial
+      debugTokenInfo();
+
+      // Debug cada 5 minutos
+      const interval = setInterval(debugTokenInfo, 5 * 60 * 1000);
+
+      return () => clearInterval(interval);
+    }
+  }, [GConText.logs]);
+
+  // Crear un wrapper para todas las llamadas API:
+  //funcion para el manejo de tokens expirado
+  const apiCall = async (url, options = {}) => {
+    const token = sessionStorage.getItem('accessToken');
+
+    const defaultOptions = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        ...options.headers
+      },
+      credentials: 'include',
+      ...options
+    };
+
+    try {
+      const response = await fetch(url, defaultOptions);
+
+      // ✨ Verificar token expirado en todas las llamadas
+      if (handleTokenExpiration(response)) {
+        throw new Error('Token expirado');
+      }
+
+      return response;
+    } catch (error) {
+      console.error('Error en API call:', error);
+      throw error;
+    }
+  };
+
+  //version con 5 estados
+  /* const getCourseStatus = (user) => {
+    if (!user.bookmark || user.bookmark === '' || user.bookmark === 'empty') {
+      return 'no-iniciado';
+    }
+  
+    try {
+      // Split por '&&' para obtener las secciones
+      const bookmarkParts = user.bookmark.split('&&');
+      const laminasString = bookmarkParts[0]; // "1-0-0-0|1-0-0-0|1-0-0-0|1-0-0-0|1-0-0-0"
+      
+      if (!laminasString) return 'no-iniciado';
+      
+      // Split por '|' para obtener cada lámina
+      const laminas = laminasString.split('|');
+      
+      let totalLaminas = 0;
+      let laminasCompletadas = 0;
+      let laminasIniciadas = 0;
+      
+      laminas.forEach(lamina => {
+        if (lamina) {
+          totalLaminas++;
+          const primerNumero = parseInt(lamina.charAt(0));
+          
+          if (primerNumero === 3) {
+            laminasCompletadas++;
+          } else if (primerNumero > 1) {
+            laminasIniciadas++;
+          }
+        }
+      });
+      
+      // Calcular porcentaje de progreso
+      const porcentajeCompletado = totalLaminas > 0 ? (laminasCompletadas / totalLaminas) * 100 : 0;
+      const porcentajeIniciado = totalLaminas > 0 ? ((laminasCompletadas + laminasIniciadas) / totalLaminas) * 100 : 0;
+      
+      // Determinar estado basado en el progreso
+      if (porcentajeCompletado === 100) {
+        return 'completado';
+      } else if (porcentajeCompletado >= 80) {
+        return 'en-progreso';
+      } else if (porcentajeCompletado >= 40) {
+        return 'iniciado';
+      } else if (porcentajeIniciado > 0) {
+        return 'pendiente';
+      } else {
+        return 'no-iniciado';
+      }
+  
+    } catch (error) {
+      console.error('Error analizando bookmark:', error);
+      return 'no-iniciado';
+    }
+  }; */
+
+  //version con 3 estados
+  const getCourseStatus = (user) => {
+    if (!user.bookmark || user.bookmark === '' || user.bookmark === 'empty') {
       return 'no-iniciado';
     }
 
-  } catch (error) {
-    console.error('Error analizando bookmark:', error);
-    return 'no-iniciado';
-  }
-}; */
+    try {
+      // Split por '&&' para obtener las secciones
+      const bookmarkParts = user.bookmark.split('&&');
+      const laminasString = bookmarkParts[0]; // "1-0-0-0|1-0-0-0|1-0-0-0|1-0-0-0|1-0-0-0"
 
-//version con 3 estados
-const getCourseStatus = (user) => {
-  if (!user.bookmark || user.bookmark === '' || user.bookmark === 'empty') {
-    return 'no-iniciado';
-  }
+      if (!laminasString) return 'no-iniciado';
 
-  try {
-    // Split por '&&' para obtener las secciones
-    const bookmarkParts = user.bookmark.split('&&');
-    const laminasString = bookmarkParts[0]; // "1-0-0-0|1-0-0-0|1-0-0-0|1-0-0-0|1-0-0-0"
-    
-    if (!laminasString) return 'no-iniciado';
-    
-    // Split por '|' para obtener cada lámina
-    const laminas = laminasString.split('|');
-    
-    let totalLaminas = 0;
-    let laminasCompletadas = 0;
-    
-    laminas.forEach(lamina => {
-      if (lamina) {
-        totalLaminas++;
-        const primerNumero = parseInt(lamina.charAt(0));
-        
-        if (primerNumero === 3) {
-          laminasCompletadas++;
+      // Split por '|' para obtener cada lámina
+      const laminas = laminasString.split('|');
+
+      let totalLaminas = 0;
+      let laminasCompletadas = 0;
+
+      laminas.forEach(lamina => {
+        if (lamina) {
+          totalLaminas++;
+          const primerNumero = parseInt(lamina.charAt(0));
+
+          if (primerNumero === 3) {
+            laminasCompletadas++;
+          }
         }
-      }
-    });
-    
-    // Calcular porcentaje de progreso
-    const porcentajeCompletado = totalLaminas > 0 ? (laminasCompletadas / totalLaminas) * 100 : 0;
-    
-    // Solo 3 estados
-    if (porcentajeCompletado === 100) {
-      return 'completado';
-    } else {
-      return 'en-progreso'; // Si existe bookmark pero no está 100% completado
-    }
-    
-  } catch (error) {
-    console.error('Error analizando bookmark:', error);
-    return 'no-iniciado';
-  }
-};
+      });
 
-//version con 5 estados
-/* const getStatusConfig = (status) => {
-  const configs = {
-    'completado': {
-      label: 'Completado',
-      icon: faCheckCircle,
-      className: 'badge-completado'
-    },
-    'en-progreso': {
-      label: 'En Progreso',
-      icon: faSpinner,
-      className: 'badge-en-progreso'
-    },
-    'iniciado': {
-      label: 'Iniciado',
-      icon: faPlay,
-      className: 'badge-iniciado'
-    },
-    'pendiente': {
-      label: 'Pendiente',
-      icon: faClock,
-      className: 'badge-pendiente'
-    },
-    'no-iniciado': {
-      label: 'No Iniciado',
-      icon: faTimesCircle,
-      className: 'badge-no-iniciado'
+      // Calcular porcentaje de progreso
+      const porcentajeCompletado = totalLaminas > 0 ? (laminasCompletadas / totalLaminas) * 100 : 0;
+
+      // Solo 3 estados
+      if (porcentajeCompletado === 100) {
+        return 'completado';
+      } else {
+        return 'en-progreso'; // Si existe bookmark pero no está 100% completado
+      }
+
+    } catch (error) {
+      console.error('Error analizando bookmark:', error);
+      return 'no-iniciado';
     }
   };
-  return configs[status] || configs['no-iniciado'];
-}; */
 
-//version con 3 estados
-const getStatusConfig = (status) => {
-  const configs = {
-    'completado': {
-      label: 'Completado',
-      icon: faCheckCircle,
-      className: 'badge-completado'
-    },
-    'en-progreso': {
-      label: 'En Progreso',
-      icon: faSpinner,
-      className: 'badge-en-progreso'
-    },
-    'no-iniciado': {
-      label: 'No Iniciado',
-      icon: faTimesCircle,
-      className: 'badge-no-iniciado'
-    }
-  };
-  return configs[status] || configs['no-iniciado'];
-};
-
-// Función adicional para obtener detalles del progreso
-const getProgressDetails = (user) => {
-  if (!user.bookmark || user.bookmark === '' || user.bookmark === 'empty') {
-    return { completadas: 0, total: 0, porcentaje: 0 };
-  }
-
-  try {
-    const bookmarkParts = user.bookmark.split('&&');
-    const laminasString = bookmarkParts[0];
-    
-    if (!laminasString) return { completadas: 0, total: 0, porcentaje: 0 };
-    
-    const laminas = laminasString.split('|');
-    let totalLaminas = 0;
-    let laminasCompletadas = 0;
-    
-    laminas.forEach(lamina => {
-      if (lamina) {
-        totalLaminas++;
-        const primerNumero = parseInt(lamina.charAt(0));
-        if (primerNumero === 3) {
-          laminasCompletadas++;
-        }
+  //version con 5 estados
+  /* const getStatusConfig = (status) => {
+    const configs = {
+      'completado': {
+        label: 'Completado',
+        icon: faCheckCircle,
+        className: 'badge-completado'
+      },
+      'en-progreso': {
+        label: 'En Progreso',
+        icon: faSpinner,
+        className: 'badge-en-progreso'
+      },
+      'iniciado': {
+        label: 'Iniciado',
+        icon: faPlay,
+        className: 'badge-iniciado'
+      },
+      'pendiente': {
+        label: 'Pendiente',
+        icon: faClock,
+        className: 'badge-pendiente'
+      },
+      'no-iniciado': {
+        label: 'No Iniciado',
+        icon: faTimesCircle,
+        className: 'badge-no-iniciado'
       }
-    });
-    
-    const porcentaje = totalLaminas > 0 ? Math.round((laminasCompletadas / totalLaminas) * 100) : 0;
-    
-    return {
-      completadas: laminasCompletadas,
-      total: totalLaminas,
-      porcentaje: porcentaje
     };
-    
-  } catch (error) {
-    console.error('Error obteniendo detalles de progreso:', error);
-    return { completadas: 0, total: 0, porcentaje: 0 };
-  }
-};
+    return configs[status] || configs['no-iniciado'];
+  }; */
+
+  //version con 3 estados
+  const getStatusConfig = (status) => {
+    const configs = {
+      'completado': {
+        label: 'Completado',
+        icon: faCheckCircle,
+        className: 'badge-completado'
+      },
+      'en-progreso': {
+        label: 'En Progreso',
+        icon: faSpinner,
+        className: 'badge-en-progreso'
+      },
+      'no-iniciado': {
+        label: 'No Iniciado',
+        icon: faTimesCircle,
+        className: 'badge-no-iniciado'
+      }
+    };
+    return configs[status] || configs['no-iniciado'];
+  };
+
+  // Función adicional para obtener detalles del progreso
+  const getProgressDetails = (user) => {
+    if (!user.bookmark || user.bookmark === '' || user.bookmark === 'empty') {
+      return { completadas: 0, total: 0, porcentaje: 0 };
+    }
+
+    try {
+      const bookmarkParts = user.bookmark.split('&&');
+      const laminasString = bookmarkParts[0];
+
+      if (!laminasString) return { completadas: 0, total: 0, porcentaje: 0 };
+
+      const laminas = laminasString.split('|');
+      let totalLaminas = 0;
+      let laminasCompletadas = 0;
+
+      laminas.forEach(lamina => {
+        if (lamina) {
+          totalLaminas++;
+          const primerNumero = parseInt(lamina.charAt(0));
+          if (primerNumero === 3) {
+            laminasCompletadas++;
+          }
+        }
+      });
+
+      const porcentaje = totalLaminas > 0 ? Math.round((laminasCompletadas / totalLaminas) * 100) : 0;
+
+      return {
+        completadas: laminasCompletadas,
+        total: totalLaminas,
+        porcentaje: porcentaje
+      };
+
+    } catch (error) {
+      console.error('Error obteniendo detalles de progreso:', error);
+      return { completadas: 0, total: 0, porcentaje: 0 };
+    }
+  };
 
   // Validación de entrada para prevenir XSS
   const validateInput = (input) => {
@@ -607,72 +611,72 @@ const getProgressDetails = (user) => {
     );
   };
 
-// Agregar esta función en Admin.js, después de exportSelectedUsers:
-const ExportarExcelTodos = () => {
-  const exportAllUsers = () => {
-    // ✨ Usar 'todos' para exportar TODOS los usuarios
-    const allUsersData = todos;
-    
-    // Calcular estadísticas de TODOS los usuarios
-    const estadisticasTotales = {
-      'completado': 0,
-      'en-progreso': 0,
-      'no-iniciado': 0
+  // Agregar esta función en Admin.js, después de exportSelectedUsers:
+  const ExportarExcelTodos = () => {
+    const exportAllUsers = () => {
+      // ✨ Usar 'todos' para exportar TODOS los usuarios
+      const allUsersData = todos;
+
+      // Calcular estadísticas de TODOS los usuarios
+      const estadisticasTotales = {
+        'completado': 0,
+        'en-progreso': 0,
+        'no-iniciado': 0
+      };
+
+      allUsersData.forEach(user => {
+        const status = getCourseStatus(user);
+        estadisticasTotales[status]++;
+      });
+
+      const totalUsuarios = allUsersData.length;
+      const porcentajeCompletado = totalUsuarios > 0 ? Math.round((estadisticasTotales['completado'] / totalUsuarios) * 100) : 0;
+      const porcentajeEnProgreso = totalUsuarios > 0 ? Math.round((estadisticasTotales['en-progreso'] / totalUsuarios) * 100) : 0;
+      const porcentajeNoIniciado = totalUsuarios > 0 ? Math.round((estadisticasTotales['no-iniciado'] / totalUsuarios) * 100) : 0;
+
+      // Datos de TODOS los usuarios
+      const datosLimpios = allUsersData.map((obj, i) => ({
+        No: i + 1,
+        grupo: obj.grupo,
+        username: obj.username,
+        nombre: obj.nombre,
+        status: (() => {
+          const status = getCourseStatus(obj);
+          return status === 'completado' ? 'Completado' :
+            status === 'en-progreso' ? 'En Progreso' : 'No Iniciado';
+        })(),
+      }));
+
+      // Agregar estadísticas al final
+      const estadisticasData = [
+        { No: '', grupo: '', username: '', nombre: '', status: '' },
+        { No: 'ESTADÍSTICAS GENERALES', grupo: '', username: '', nombre: '', status: '' },
+        { No: 'Total usuarios:', grupo: totalUsuarios, username: '', nombre: '', status: '' },
+        { No: 'Completados:', grupo: estadisticasTotales['completado'], username: `${porcentajeCompletado}%`, nombre: '', status: '' },
+        { No: 'En Progreso:', grupo: estadisticasTotales['en-progreso'], username: `${porcentajeEnProgreso}%`, nombre: '', status: '' },
+        { No: 'No Iniciados:', grupo: estadisticasTotales['no-iniciado'], username: `${porcentajeNoIniciado}%`, nombre: '', status: '' }
+      ];
+
+      const datosCompletos = [...datosLimpios, ...estadisticasData];
+
+      const worksheet = XLSX.utils.json_to_sheet(datosCompletos);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'Todos los Usuarios');
+      const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+      const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+
+      const fecha = new Date().toISOString().split('T')[0];
+      saveAs(blob, `todos-los-usuarios-${fecha}.xlsx`);
+
+      showToast.success(`${totalUsuarios} usuarios exportados correctamente`);
     };
 
-    allUsersData.forEach(user => {
-      const status = getCourseStatus(user);
-      estadisticasTotales[status]++;
-    });
-
-    const totalUsuarios = allUsersData.length;
-    const porcentajeCompletado = totalUsuarios > 0 ? Math.round((estadisticasTotales['completado'] / totalUsuarios) * 100) : 0;
-    const porcentajeEnProgreso = totalUsuarios > 0 ? Math.round((estadisticasTotales['en-progreso'] / totalUsuarios) * 100) : 0;
-    const porcentajeNoIniciado = totalUsuarios > 0 ? Math.round((estadisticasTotales['no-iniciado'] / totalUsuarios) * 100) : 0;
-
-    // Datos de TODOS los usuarios
-    const datosLimpios = allUsersData.map((obj, i) => ({
-      No: i + 1,
-      grupo: obj.grupo,
-      username: obj.username,
-      nombre: obj.nombre,
-      status: (() => {
-        const status = getCourseStatus(obj);
-        return status === 'completado' ? 'Completado' :
-          status === 'en-progreso' ? 'En Progreso' : 'No Iniciado';
-      })(),
-    }));
-
-    // Agregar estadísticas al final
-    const estadisticasData = [
-      { No: '', grupo: '', username: '', nombre: '', status: '' },
-      { No: 'ESTADÍSTICAS GENERALES', grupo: '', username: '', nombre: '', status: '' },
-      { No: 'Total usuarios:', grupo: totalUsuarios, username: '', nombre: '', status: '' },
-      { No: 'Completados:', grupo: estadisticasTotales['completado'], username: `${porcentajeCompletado}%`, nombre: '', status: '' },
-      { No: 'En Progreso:', grupo: estadisticasTotales['en-progreso'], username: `${porcentajeEnProgreso}%`, nombre: '', status: '' },
-      { No: 'No Iniciados:', grupo: estadisticasTotales['no-iniciado'], username: `${porcentajeNoIniciado}%`, nombre: '', status: '' }
-    ];
-
-    const datosCompletos = [...datosLimpios, ...estadisticasData];
-
-    const worksheet = XLSX.utils.json_to_sheet(datosCompletos);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Todos los Usuarios');
-    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-    const blob = new Blob([excelBuffer], {type: 'application/octet-stream'});
-
-    const fecha = new Date().toISOString().split('T')[0];
-    saveAs(blob, `todos-los-usuarios-${fecha}.xlsx`);
-    
-    showToast.success(`${totalUsuarios} usuarios exportados correctamente`);
+    return (
+      <span className='btn_ch bg-mint me-1' onClick={exportAllUsers}>
+        <FontAwesomeIcon icon={faFileArrowDown} /> Exportar Excel
+      </span>
+    );
   };
-
-  return (
-    <span className='btn_ch bg-mint me-1' onClick={exportAllUsers}>
-      <FontAwesomeIcon icon={faFileArrowDown} /> Exportar Excel
-    </span>
-  );
-};
 
 
   function formatearFechaSimple(fechaISO, zona = Intl.DateTimeFormat().resolvedOptions().timeZone) {
@@ -711,9 +715,9 @@ const ExportarExcelTodos = () => {
       setTodos(data);
       setOriginalTodos(data); // ← También agregar esto
       if (GConText.logs) console.log('✅ Usuarios cargados via API:', data.length);
-        toast.dismiss(loadingToast);
-        showToast.success("Usuarios cargados correctamente");
-      
+      toast.dismiss(loadingToast);
+      showToast.success("Usuarios cargados correctamente");
+
     } catch (error) {
       if (GConText.logs) console.error('❌ Error cargando usuarios:', error);
       toast.dismiss(loadingToast);
@@ -742,10 +746,10 @@ const ExportarExcelTodos = () => {
   const tableRef2 = useRef();
 
 
-// Reemplazar la función submitDelete existente por esta versión mejorada:
-const submitDelete = (id, username, user) => {
-  // Crear el contenido HTML personalizado con FontAwesome
-  const htmlContent = `
+  // Reemplazar la función submitDelete existente por esta versión mejorada:
+  const submitDelete = (id, username, user) => {
+    // Crear el contenido HTML personalizado con FontAwesome
+    const htmlContent = `
     <div style="text-align: left; padding: 10px;">
       <p><strong><i class="fas fa-user"></i> Usuario:</strong> ${user.username}</p>
       <p><strong><i class="fas fa-id-card"></i> Nombre:</strong> ${user.nombre}</p>
@@ -756,35 +760,35 @@ const submitDelete = (id, username, user) => {
     </div>
   `;
 
-  Swal.fire({
-    title: `<i class="fas fa-trash"></i> ¿Eliminar usuario?`,
-    html: htmlContent,
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#dc3545",
-    cancelButtonColor: "#6c757d",
-    confirmButtonText: '<i class="fas fa-trash"></i> Sí, eliminar',
-    cancelButtonText: '<i class="fas fa-times"></i> Cancelar',
-    width: '500px',
-    customClass: {
-      popup: 'swal-delete-popup',
-      title: 'swal-delete-title',
-      htmlContainer: 'swal-delete-content'
-    },
-    showClass: {
-      popup: 'animate__animated animate__fadeInDown'
-    },
-    hideClass: {
-      popup: 'animate__animated animate__fadeOutUp'
-    }
-  }).then((result) => {
-    if (result.isConfirmed) {
-      deleteNote(id);
-      
-      showToast.success("Usuario eliminado correctamente");
-    }
-  });
-};
+    Swal.fire({
+      title: `<i class="fas fa-trash"></i> ¿Eliminar usuario?`,
+      html: htmlContent,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#dc3545",
+      cancelButtonColor: "#6c757d",
+      confirmButtonText: '<i class="fas fa-trash"></i> Sí, eliminar',
+      cancelButtonText: '<i class="fas fa-times"></i> Cancelar',
+      width: '500px',
+      customClass: {
+        popup: 'swal-delete-popup',
+        title: 'swal-delete-title',
+        htmlContainer: 'swal-delete-content'
+      },
+      showClass: {
+        popup: 'animate__animated animate__fadeInDown'
+      },
+      hideClass: {
+        popup: 'animate__animated animate__fadeOutUp'
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteNote(id);
+
+        showToast.success("Usuario eliminado correctamente");
+      }
+    });
+  };
 
 
   const submitUpload = () => {
@@ -875,82 +879,82 @@ const submitDelete = (id, username, user) => {
   }, [sg, su, sn, ss, todos, globalSearch]); // ← Agregar globalSearch a las dependencias
 
 
-// En el useMemo de estadísticas, agregar:
-//simple sin estados solo completado y no completado
-/* const estadisticas = useMemo(() => {
-  const total = filteredTodos.length;
-  const completados = filteredTodos.filter(u => u.status === true).length;
-  const admins = filteredTodos.filter(u => u.type === 'admin').length;
-  const users = filteredTodos.filter(u => u.type === 'user').length;
-  const noCompletados = filteredTodos.filter(u => u.status === false).length;
-  
-  return {
-    total,
-    admins,
-    users,
-    completados,
-    noCompletados,
-    grupos: [...new Set(filteredTodos.map(u => u.grupo))].length,
-    // Porcentajes
-    porcentajeCompletados: total > 0 ? Math.round((completados / total) * 100) : 0,
-    porcentajeAdmins: total > 0 ? Math.round((admins / total) * 100) : 0,
-    porcentajeUsers: total > 0 ? Math.round((users / total) * 100) : 0,
-    porcentajePendientes: total > 0 ? Math.round((noCompletados / total) * 100) : 0
-  };
-}, [filteredTodos]); */
+  // En el useMemo de estadísticas, agregar:
+  //simple sin estados solo completado y no completado
+  /* const estadisticas = useMemo(() => {
+    const total = filteredTodos.length;
+    const completados = filteredTodos.filter(u => u.status === true).length;
+    const admins = filteredTodos.filter(u => u.type === 'admin').length;
+    const users = filteredTodos.filter(u => u.type === 'user').length;
+    const noCompletados = filteredTodos.filter(u => u.status === false).length;
+    
+    return {
+      total,
+      admins,
+      users,
+      completados,
+      noCompletados,
+      grupos: [...new Set(filteredTodos.map(u => u.grupo))].length,
+      // Porcentajes
+      porcentajeCompletados: total > 0 ? Math.round((completados / total) * 100) : 0,
+      porcentajeAdmins: total > 0 ? Math.round((admins / total) * 100) : 0,
+      porcentajeUsers: total > 0 ? Math.round((users / total) * 100) : 0,
+      porcentajePendientes: total > 0 ? Math.round((noCompletados / total) * 100) : 0
+    };
+  }, [filteredTodos]); */
 
-//con 5 estados
-/* const estadisticas = useMemo(() => {
-  const total = filteredTodos.length;
-  const statusCounts = {
-    completado: 0,
-    'en-progreso': 0,
-    iniciado: 0,
-    pendiente: 0,
-    'no-iniciado': 0
-  };
-  
-  filteredTodos.forEach(user => {
-    const status = getCourseStatus(user);
-    statusCounts[status]++;
-  });
-  
-  return {
-    total,
-    ...statusCounts,
-    // Porcentajes
-    porcentajeCompletados: total > 0 ? Math.round((statusCounts.completado / total) * 100) : 0,
-    porcentajeEnProgreso: total > 0 ? Math.round((statusCounts['en-progreso'] / total) * 100) : 0,
-    porcentajeIniciado: total > 0 ? Math.round((statusCounts.iniciado / total) * 100) : 0,
-    porcentajePendiente: total > 0 ? Math.round((statusCounts.pendiente / total) * 100) : 0,
-    porcentajeNoIniciado: total > 0 ? Math.round((statusCounts['no-iniciado'] / total) * 100) : 0
-  };
-}, [filteredTodos]); */
+  //con 5 estados
+  /* const estadisticas = useMemo(() => {
+    const total = filteredTodos.length;
+    const statusCounts = {
+      completado: 0,
+      'en-progreso': 0,
+      iniciado: 0,
+      pendiente: 0,
+      'no-iniciado': 0
+    };
+    
+    filteredTodos.forEach(user => {
+      const status = getCourseStatus(user);
+      statusCounts[status]++;
+    });
+    
+    return {
+      total,
+      ...statusCounts,
+      // Porcentajes
+      porcentajeCompletados: total > 0 ? Math.round((statusCounts.completado / total) * 100) : 0,
+      porcentajeEnProgreso: total > 0 ? Math.round((statusCounts['en-progreso'] / total) * 100) : 0,
+      porcentajeIniciado: total > 0 ? Math.round((statusCounts.iniciado / total) * 100) : 0,
+      porcentajePendiente: total > 0 ? Math.round((statusCounts.pendiente / total) * 100) : 0,
+      porcentajeNoIniciado: total > 0 ? Math.round((statusCounts['no-iniciado'] / total) * 100) : 0
+    };
+  }, [filteredTodos]); */
 
-//con 3 estados
-const estadisticas = useMemo(() => {
-  const total = filteredTodos.length;
-  const statusCounts = {
-    completado: 0,
-    'en-progreso': 0,
-    'no-iniciado': 0
-  };
-  
-  filteredTodos.forEach(user => {
-    const status = getCourseStatus(user);
-    statusCounts[status]++;
-  });
-  
-  return {
-    total,
-    ...statusCounts,
-    // Porcentajes
-    porcentajeCompletados: total > 0 ? Math.round((statusCounts.completado / total) * 100) : 0,
-    porcentajeEnProgreso: total > 0 ? Math.round((statusCounts['en-progreso'] / total) * 100) : 0,
-    porcentajeNoIniciado: total > 0 ? Math.round((statusCounts['no-iniciado'] / total) * 100) : 0
-  };
-//}, [filteredTodos]);
-}, [todos]); // ← Cambiar dependencia de filteredTodos a todos
+  //con 3 estados
+  const estadisticas = useMemo(() => {
+    const total = filteredTodos.length;
+    const statusCounts = {
+      completado: 0,
+      'en-progreso': 0,
+      'no-iniciado': 0
+    };
+
+    filteredTodos.forEach(user => {
+      const status = getCourseStatus(user);
+      statusCounts[status]++;
+    });
+
+    return {
+      total,
+      ...statusCounts,
+      // Porcentajes
+      porcentajeCompletados: total > 0 ? Math.round((statusCounts.completado / total) * 100) : 0,
+      porcentajeEnProgreso: total > 0 ? Math.round((statusCounts['en-progreso'] / total) * 100) : 0,
+      porcentajeNoIniciado: total > 0 ? Math.round((statusCounts['no-iniciado'] / total) * 100) : 0
+    };
+    //}, [filteredTodos]);
+  }, [todos]); // ← Cambiar dependencia de filteredTodos a todos
 
   //2025may
   const [paginaActual, setPaginaActual] = useState(1);
@@ -1171,9 +1175,9 @@ const estadisticas = useMemo(() => {
     setEditType(user.type);
     /* setEditStatus(user.status); */
 
-  // ✨ Inicializar el select con el estado actual
-  const currentStatus = getCourseStatus(user);
-  setSelectedStatus(currentStatus);
+    // ✨ Inicializar el select con el estado actual
+    const currentStatus = getCourseStatus(user);
+    setSelectedStatus(currentStatus);
 
     setShowEditModal(true);
   };
@@ -1218,112 +1222,112 @@ const estadisticas = useMemo(() => {
       showToast.error("No se pudo actualizar el usuario");
     }
   }; */
-// Guardar cambios
-/* const saveUserChanges = async () => {
-  try {
-    const updates = {
-      username: editUsername,
-      nombre: editNombre,
-      grupo: editGrupo,
-      type: editType,
-      status: editStatus
-    };
-
-    // Solo incluir password si se escribió algo
-    if (editPassword.trim() !== '') {
-      updates.password = editPassword;
-    }
-
-    // ✨ LÓGICA FINAL: Completado = 1 lámina, No completado = bookmark vacío
-    if (editStatus !== editingUser.status) {
-      if (editStatus === true) {
-        // Marcar como completado: 1 lámina completada
-        const currentBookmark = editingUser.bookmark || '1-0-0-0&&1&&index&&&&esp&&';
-        
-        try {
-          const bookmarkParts = currentBookmark.split('&&');
-          bookmarkParts[0] = '3-0-0-0'; // 1 lámina completada
-          updates.bookmark = bookmarkParts.join('&&');
-        } catch (error) {
-          // Bookmark por defecto completado
-          updates.bookmark = '3-0-0-0&&1&&index&&&&esp&&';
+  // Guardar cambios
+  /* const saveUserChanges = async () => {
+    try {
+      const updates = {
+        username: editUsername,
+        nombre: editNombre,
+        grupo: editGrupo,
+        type: editType,
+        status: editStatus
+      };
+  
+      // Solo incluir password si se escribió algo
+      if (editPassword.trim() !== '') {
+        updates.password = editPassword;
+      }
+  
+      // ✨ LÓGICA FINAL: Completado = 1 lámina, No completado = bookmark vacío
+      if (editStatus !== editingUser.status) {
+        if (editStatus === true) {
+          // Marcar como completado: 1 lámina completada
+          const currentBookmark = editingUser.bookmark || '1-0-0-0&&1&&index&&&&esp&&';
+          
+          try {
+            const bookmarkParts = currentBookmark.split('&&');
+            bookmarkParts[0] = '3-0-0-0'; // 1 lámina completada
+            updates.bookmark = bookmarkParts.join('&&');
+          } catch (error) {
+            // Bookmark por defecto completado
+            updates.bookmark = '3-0-0-0&&1&&index&&&&esp&&';
+          }
+        } else {
+          // Desmarcar como completado: bookmark vacío para mostrar "No Iniciado"
+          updates.bookmark = '';
         }
-      } else {
-        // Desmarcar como completado: bookmark vacío para mostrar "No Iniciado"
-        updates.bookmark = '';
       }
-    }
-
-    await updateUserAPI(editingUser.id, updates);
-    await chkData();
-    closeEditModal();
-
-    showToast.success("Usuario actualizado correctamente");
-
-  } catch (error) {
-    console.error('Error actualizando usuario:', error);
-    showToast.error("No se pudo actualizar el usuario");
-  }
-}; */
-
-// Guardar cambios
-const saveUserChanges = async () => {
-  try {
-    // ✨ Variable para cantidad de láminas del curso
-    const cant_laminas = 5; // Ajustar según tu curso
-    
-    const updates = {};
-
-    // Solo incluir campos que realmente cambiaron
-    if (editUsername !== editingUser.username) updates.username = editUsername;
-    if (editNombre !== editingUser.nombre) updates.nombre = editNombre;
-    if (editGrupo !== editingUser.grupo) updates.grupo = editGrupo;
-    if (editType !== editingUser.type) updates.type = editType;
-
-    // Solo incluir password si se escribió algo
-    if (editPassword.trim() !== '') {
-      updates.password = editPassword;
-    }
-
-    // ✅ NUEVA LÓGICA:
-    const currentStatus = getCourseStatus(editingUser);
-    const statusChanged = selectedStatus !== currentStatus;
-
-    if (statusChanged) {
-      // Determinar el nuevo editStatus basado en selectedStatus
-      const newEditStatus = selectedStatus === 'completado';
-      updates.status = newEditStatus;
-      
-      if (selectedStatus === 'completado') {
-        // ✨ Generar láminas completadas según cant_laminas
-        const laminasCompletadas = Array(cant_laminas).fill('3-0-0-0').join('|');
-        updates.bookmark = `${laminasCompletadas}&&1&&index&&MODIF_BASE&&esp&&`;
-        
-      } else if (selectedStatus === 'no-iniciado') {
-        // Borrar bookmark completamente
-        updates.bookmark = '';
-      }
-      // Si es 'en-progreso', no hacer nada (mantener actual)
-    }
-
-    // Si no hay cambios, cerrar modal sin hacer nada
-    if (Object.keys(updates).length === 0) {
+  
+      await updateUserAPI(editingUser.id, updates);
+      await chkData();
       closeEditModal();
-      showToast.info("No se realizaron cambios");
-      return;
+  
+      showToast.success("Usuario actualizado correctamente");
+  
+    } catch (error) {
+      console.error('Error actualizando usuario:', error);
+      showToast.error("No se pudo actualizar el usuario");
     }
+  }; */
 
-    await updateUserAPI(editingUser.id, updates);
-    await chkData();
-    closeEditModal();
+  // Guardar cambios
+  const saveUserChanges = async () => {
+    try {
+      // ✨ Variable para cantidad de láminas del curso
+      const cant_laminas = 5; // Ajustar según tu curso
 
-    showToast.success("Usuario actualizado correctamente");
+      const updates = {};
 
-  } catch (error) {
-    console.error('Error actualizando usuario:', error);
-    showToast.error("No se pudo actualizar el usuario");
-  }
-};
+      // Solo incluir campos que realmente cambiaron
+      if (editUsername !== editingUser.username) updates.username = editUsername;
+      if (editNombre !== editingUser.nombre) updates.nombre = editNombre;
+      if (editGrupo !== editingUser.grupo) updates.grupo = editGrupo;
+      if (editType !== editingUser.type) updates.type = editType;
+
+      // Solo incluir password si se escribió algo
+      if (editPassword.trim() !== '') {
+        updates.password = editPassword;
+      }
+
+      // ✅ NUEVA LÓGICA:
+      const currentStatus = getCourseStatus(editingUser);
+      const statusChanged = selectedStatus !== currentStatus;
+
+      if (statusChanged) {
+        // Determinar el nuevo editStatus basado en selectedStatus
+        const newEditStatus = selectedStatus === 'completado';
+        updates.status = newEditStatus;
+
+        if (selectedStatus === 'completado') {
+          // ✨ Generar láminas completadas según cant_laminas
+          const laminasCompletadas = Array(cant_laminas).fill('3-0-0-0').join('|');
+          updates.bookmark = `${laminasCompletadas}&&1&&index&&MODIF_BASE&&esp&&`;
+
+        } else if (selectedStatus === 'no-iniciado') {
+          // Borrar bookmark completamente
+          updates.bookmark = '';
+        }
+        // Si es 'en-progreso', no hacer nada (mantener actual)
+      }
+
+      // Si no hay cambios, cerrar modal sin hacer nada
+      if (Object.keys(updates).length === 0) {
+        closeEditModal();
+        showToast.info("No se realizaron cambios");
+        return;
+      }
+
+      await updateUserAPI(editingUser.id, updates);
+      await chkData();
+      closeEditModal();
+
+      showToast.success("Usuario actualizado correctamente");
+
+    } catch (error) {
+      console.error('Error actualizando usuario:', error);
+      showToast.error("No se pudo actualizar el usuario");
+    }
+  };
 
 
 
@@ -1414,8 +1418,8 @@ const saveUserChanges = async () => {
 
     } catch (error) {
       console.error('Error creando usuario:', error);
-      showToast.error(error.message.includes('Usuario ya existe') 
-        ? "El username ya existe, elige otro" 
+      showToast.error(error.message.includes('Usuario ya existe')
+        ? "El username ya existe, elige otro"
         : "No se pudo crear el usuario");
     }
   };
@@ -1493,148 +1497,148 @@ const saveUserChanges = async () => {
     </th>
   );
 
-// Agregar después de los otros estados
-const [selectedUsers, setSelectedUsers] = useState([]);
-const [selectAll, setSelectAll] = useState(false);
+  // Agregar después de los otros estados
+  const [selectedUsers, setSelectedUsers] = useState([]);
+  const [selectAll, setSelectAll] = useState(false);
 
-// Agregar después de handleGlobalSearch
-const handleSelectUser = (userId, isSelected) => {
-  if (isSelected) {
-    setSelectedUsers([...selectedUsers, userId]);
-  } else {
-    setSelectedUsers(selectedUsers.filter(id => id !== userId));
-  }
-};
-
-const handleSelectAll = (isSelected) => {
-  setSelectAll(isSelected);
-  if (isSelected) {
-    setSelectedUsers(itemsEstaPagina.map(user => user.id));
-  } else {
-    setSelectedUsers([]);
-  }
-};
-
-/* const deleteSelectedUsers = async () => {
-  if (selectedUsers.length === 0) {
-    Swal.fire({
-      title: "Sin selección",
-      text: "Selecciona al menos un usuario para eliminar",
-      icon: "warning"
-    });
-    return;
-  }
-
-  Swal.fire({
-    title: `¿Eliminar ${selectedUsers.length} usuarios?`,
-    text: "Esta acción no se puede deshacer",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#d33",
-    confirmButtonText: "Sí, eliminar",
-    cancelButtonText: "Cancelar"
-  }).then(async (result) => {
-    if (result.isConfirmed) {
-      try {
-        // Eliminar usuarios uno por uno
-        for (const userId of selectedUsers) {
-          await deleteUserAPI(userId);
-        }
-        
-        // Actualizar estado local
-        setTodos(todos.filter(user => !selectedUsers.includes(user.id)));
-        setSelectedUsers([]);
-        setSelectAll(false);
-        
-        Swal.fire({
-          title: "¡Eliminados!",
-          text: `${selectedUsers.length} usuarios eliminados correctamente`,
-          icon: "success"
-        });
-      } catch (error) {
-        Swal.fire({
-          title: "Error",
-          text: "No se pudieron eliminar algunos usuarios",
-          icon: "error"
-        });
-      }
+  // Agregar después de handleGlobalSearch
+  const handleSelectUser = (userId, isSelected) => {
+    if (isSelected) {
+      setSelectedUsers([...selectedUsers, userId]);
+    } else {
+      setSelectedUsers(selectedUsers.filter(id => id !== userId));
     }
-  });
-}; */
+  };
 
-// También actualizar deleteSelectedUsers:
-const deleteSelectedUsers = async () => {
-  if (selectedUsers.length === 0) {
-    /* Swal.fire({
-      title: "Sin selección",
-      text: "Selecciona al menos un usuario para eliminar",
-      icon: "warning"
-    }); */
-    showToast.warning("Selecciona al menos un usuario para eliminar");
-    return;
-  }
+  const handleSelectAll = (isSelected) => {
+    setSelectAll(isSelected);
+    if (isSelected) {
+      setSelectedUsers(itemsEstaPagina.map(user => user.id));
+    } else {
+      setSelectedUsers([]);
+    }
+  };
 
-  // Obtener detalles de usuarios seleccionados
-  const selectedUsersData = todos.filter(user => selectedUsers.includes(user.id));
-  const usersList = selectedUsersData.map(user => 
-    `• <i class="fas fa-user"></i> ${user.username} (${user.nombre}) - <i class="fas fa-building"></i> ${user.grupo}`
-  ).join('<br>');
+  /* const deleteSelectedUsers = async () => {
+    if (selectedUsers.length === 0) {
+      Swal.fire({
+        title: "Sin selección",
+        text: "Selecciona al menos un usuario para eliminar",
+        icon: "warning"
+      });
+      return;
+    }
+  
+    Swal.fire({
+      title: `¿Eliminar ${selectedUsers.length} usuarios?`,
+      text: "Esta acción no se puede deshacer",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar"
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          // Eliminar usuarios uno por uno
+          for (const userId of selectedUsers) {
+            await deleteUserAPI(userId);
+          }
+          
+          // Actualizar estado local
+          setTodos(todos.filter(user => !selectedUsers.includes(user.id)));
+          setSelectedUsers([]);
+          setSelectAll(false);
+          
+          Swal.fire({
+            title: "¡Eliminados!",
+            text: `${selectedUsers.length} usuarios eliminados correctamente`,
+            icon: "success"
+          });
+        } catch (error) {
+          Swal.fire({
+            title: "Error",
+            text: "No se pudieron eliminar algunos usuarios",
+            icon: "error"
+          });
+        }
+      }
+    });
+  }; */
 
-  Swal.fire({
-    title: `<i class="fas fa-trash"></i> ¿Eliminar ${selectedUsers.length} usuarios?`,
-    html: `
+  // También actualizar deleteSelectedUsers:
+  const deleteSelectedUsers = async () => {
+    if (selectedUsers.length === 0) {
+      /* Swal.fire({
+        title: "Sin selección",
+        text: "Selecciona al menos un usuario para eliminar",
+        icon: "warning"
+      }); */
+      showToast.warning("Selecciona al menos un usuario para eliminar");
+      return;
+    }
+
+    // Obtener detalles de usuarios seleccionados
+    const selectedUsersData = todos.filter(user => selectedUsers.includes(user.id));
+    const usersList = selectedUsersData.map(user =>
+      `• <i class="fas fa-user"></i> ${user.username} (${user.nombre}) - <i class="fas fa-building"></i> ${user.grupo}`
+    ).join('<br>');
+
+    Swal.fire({
+      title: `<i class="fas fa-trash"></i> ¿Eliminar ${selectedUsers.length} usuarios?`,
+      html: `
       <div style="text-align: left; max-height: 200px; overflow-y: auto; padding: 10px; background: #f8f9fa; border-radius: 8px; margin: 10px 0;">
         ${usersList}
       </div>
       <p style="color: #dc3545; font-weight: bold;"><i class="fas fa-exclamation-triangle"></i> Esta acción no se puede deshacer</p>
     `,
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#dc3545",
-    confirmButtonText: `<i class="fas fa-trash"></i> Sí, eliminar ${selectedUsers.length} usuarios`,
-    cancelButtonText: '<i class="fas fa-times"></i> Cancelar',
-    width: '600px'
-  }).then(async (result) => {
-    if (result.isConfirmed) {
-      try {
-        for (const userId of selectedUsers) {
-          await deleteUserAPI(userId);
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#dc3545",
+      confirmButtonText: `<i class="fas fa-trash"></i> Sí, eliminar ${selectedUsers.length} usuarios`,
+      cancelButtonText: '<i class="fas fa-times"></i> Cancelar',
+      width: '600px'
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          for (const userId of selectedUsers) {
+            await deleteUserAPI(userId);
+          }
+
+          setTodos(todos.filter(user => !selectedUsers.includes(user.id)));
+          setSelectedUsers([]);
+          setSelectAll(false);
+
+          /* Swal.fire({
+            title: "¡Eliminados!",
+            html: `<strong>${selectedUsers.length} usuarios</strong> eliminados correctamente`,
+            icon: "success",
+            timer: 3000
+          }); */
+
+          showToast.success(`${selectedUsers.length} usuarios eliminados correctamente`);
+        } catch (error) {
+          /* Swal.fire({
+            title: "Error",
+            text: "No se pudieron eliminar algunos usuarios",
+            icon: "error"
+          }); */
+          showToast.error("No se pudo eliminar el usuario");
         }
-        
-        setTodos(todos.filter(user => !selectedUsers.includes(user.id)));
-        setSelectedUsers([]);
-        setSelectAll(false);
-        
-        /* Swal.fire({
-          title: "¡Eliminados!",
-          html: `<strong>${selectedUsers.length} usuarios</strong> eliminados correctamente`,
-          icon: "success",
-          timer: 3000
-        }); */
-
-        showToast.success(`${selectedUsers.length} usuarios eliminados correctamente`);
-      } catch (error) {
-        /* Swal.fire({
-          title: "Error",
-          text: "No se pudieron eliminar algunos usuarios",
-          icon: "error"
-        }); */
-        showToast.error("No se pudo eliminar el usuario");
       }
-    }
-  });
-};
+    });
+  };
 
-const exportSelectedUsers = () => {
-  if (selectedUsers.length === 0) {
-    /* Swal.fire({
-      title: "Sin selección",
-      text: "Selecciona al menos un usuario para exportar",
-      icon: "warning"
-    }); */
-    showToast.warning("Selecciona al menos un usuario para exportar");
-    return;
-  }
+  const exportSelectedUsers = () => {
+    if (selectedUsers.length === 0) {
+      /* Swal.fire({
+        title: "Sin selección",
+        text: "Selecciona al menos un usuario para exportar",
+        icon: "warning"
+      }); */
+      showToast.warning("Selecciona al menos un usuario para exportar");
+      return;
+    }
 
     const selectedData = todos.filter(user => selectedUsers.includes(user.id));
 
@@ -1655,51 +1659,51 @@ const exportSelectedUsers = () => {
     const porcentajeEnProgreso = totalSeleccionados > 0 ? Math.round((estadisticasSeleccionados['en-progreso'] / totalSeleccionados) * 100) : 0;
     const porcentajeNoIniciado = totalSeleccionados > 0 ? Math.round((estadisticasSeleccionados['no-iniciado'] / totalSeleccionados) * 100) : 0;
 
-  // Datos de usuarios
-  const datosLimpios = selectedData.map((obj, i) => ({
-    No: i + 1,
-    grupo: obj.grupo,
-    username: obj.username,
-    nombre: obj.nombre,
-    status: (() => {
-      const status = getCourseStatus(obj);
-      return status === 'completado' ? 'Completado' :
-        status === 'en-progreso' ? 'En Progreso' : 'No Iniciado';
-    })(),
-    //status: obj.status ? 'completado' : 'no completado',
-  }));
+    // Datos de usuarios
+    const datosLimpios = selectedData.map((obj, i) => ({
+      No: i + 1,
+      grupo: obj.grupo,
+      username: obj.username,
+      nombre: obj.nombre,
+      status: (() => {
+        const status = getCourseStatus(obj);
+        return status === 'completado' ? 'Completado' :
+          status === 'en-progreso' ? 'En Progreso' : 'No Iniciado';
+      })(),
+      //status: obj.status ? 'completado' : 'no completado',
+    }));
 
-  // ✨ Agregar estadísticas al final
-  const estadisticasData = [
-    { No: '', grupo: '', username: '', nombre: '', status: '' }, // Fila vacía
-    { No: 'ESTADÍSTICAS', grupo: '', username: '', nombre: '', status: '' },
-    { No: 'Total usuarios:', grupo: totalSeleccionados, username: '', nombre: '', status: '' },
-    { No: 'Completados:', grupo: estadisticasSeleccionados['completado'], username: `${porcentajeCompletado}%`, nombre: '', status: '' },
-    { No: 'En Progreso:', grupo: estadisticasSeleccionados['en-progreso'], username: `${porcentajeEnProgreso}%`, nombre: '', status: '' },
-    { No: 'No Iniciados:', grupo: estadisticasSeleccionados['no-iniciado'], username: `${porcentajeNoIniciado}%`, nombre: '', status: '' }
-  ];
+    // ✨ Agregar estadísticas al final
+    const estadisticasData = [
+      { No: '', grupo: '', username: '', nombre: '', status: '' }, // Fila vacía
+      { No: 'ESTADÍSTICAS', grupo: '', username: '', nombre: '', status: '' },
+      { No: 'Total usuarios:', grupo: totalSeleccionados, username: '', nombre: '', status: '' },
+      { No: 'Completados:', grupo: estadisticasSeleccionados['completado'], username: `${porcentajeCompletado}%`, nombre: '', status: '' },
+      { No: 'En Progreso:', grupo: estadisticasSeleccionados['en-progreso'], username: `${porcentajeEnProgreso}%`, nombre: '', status: '' },
+      { No: 'No Iniciados:', grupo: estadisticasSeleccionados['no-iniciado'], username: `${porcentajeNoIniciado}%`, nombre: '', status: '' }
+    ];
 
-  // Combinar datos de usuarios con estadísticas
-  const datosCompletos = [...datosLimpios, ...estadisticasData];
+    // Combinar datos de usuarios con estadísticas
+    const datosCompletos = [...datosLimpios, ...estadisticasData];
 
-  //const worksheet = XLSX.utils.json_to_sheet(datosLimpios);
-  const worksheet = XLSX.utils.json_to_sheet(datosCompletos);
-  const workbook = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(workbook, worksheet, 'Usuarios Seleccionados');
-  const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-  const blob = new Blob([excelBuffer], {type: 'application/octet-stream'});
+    //const worksheet = XLSX.utils.json_to_sheet(datosLimpios);
+    const worksheet = XLSX.utils.json_to_sheet(datosCompletos);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Usuarios Seleccionados');
+    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
 
-  const fecha = new Date().toISOString().split('T')[0];
-  saveAs(blob, `usuarios-seleccionados-${fecha}.xlsx`);
-  
-  /* Swal.fire({
-    title: "¡Exportado!",
-    text: `${selectedUsers.length} usuarios exportados correctamente`,
-    icon: "success"
-  }); */
+    const fecha = new Date().toISOString().split('T')[0];
+    saveAs(blob, `usuarios-seleccionados-${fecha}.xlsx`);
 
-  showToast.success(`${selectedUsers.length} usuarios exportados correctamente`);
-};
+    /* Swal.fire({
+      title: "¡Exportado!",
+      text: `${selectedUsers.length} usuarios exportados correctamente`,
+      icon: "success"
+    }); */
+
+    showToast.success(`${selectedUsers.length} usuarios exportados correctamente`);
+  };
 
   return (
     <>
@@ -1813,34 +1817,34 @@ const exportSelectedUsers = () => {
                   <div className="col-4">
                     <div className="form-group mb-3 text-left">
                       <label style={{ fontSize: '20px', fontWeight: 'bold', color: '#555' }}>Estado del Curso:</label>
-                        <select
-                          className="form-control form-control-sm"
-                          value={selectedStatus} // ← Usar selectedStatus en lugar de getCourseStatus
-                          onChange={(e) => {
-                            setSelectedStatus(e.target.value); // ← Actualizar selectedStatus
-                            
-                            if (e.target.value === 'completado') {
-                              setEditStatus(true);
-                            } else if (e.target.value === 'no-iniciado') {
-                              setEditStatus(false);
-                            }
-                          }}
-                          style={{
-                            borderRadius: '6px',
-                            border: '1px solid #ddd',
-                            backgroundColor: (() => {
-                              if (selectedStatus === 'completado') return '#80e30f';
-                              if (selectedStatus === 'en-progreso') return '#eda200';
-                              return '#d2d1d1';
-                            })(),
-                            color: '#000',
-                            fontWeight: 'bold'
-                          }}
-                        >
-                          <option value="no-iniciado">No Iniciado</option>
-                          <option value="en-progreso" disabled>En Progreso (solo lectura)</option>
-                          <option value="completado">Completado</option>
-                        </select>
+                      <select
+                        className="form-control form-control-sm"
+                        value={selectedStatus} // ← Usar selectedStatus en lugar de getCourseStatus
+                        onChange={(e) => {
+                          setSelectedStatus(e.target.value); // ← Actualizar selectedStatus
+
+                          if (e.target.value === 'completado') {
+                            setEditStatus(true);
+                          } else if (e.target.value === 'no-iniciado') {
+                            setEditStatus(false);
+                          }
+                        }}
+                        style={{
+                          borderRadius: '6px',
+                          border: '1px solid #ddd',
+                          backgroundColor: (() => {
+                            if (selectedStatus === 'completado') return '#80e30f';
+                            if (selectedStatus === 'en-progreso') return '#eda200';
+                            return '#d2d1d1';
+                          })(),
+                          color: '#000',
+                          fontWeight: 'bold'
+                        }}
+                      >
+                        <option value="no-iniciado">No Iniciado</option>
+                        <option value="en-progreso" disabled>En Progreso (solo lectura)</option>
+                        <option value="completado">Completado</option>
+                      </select>
 
                       {/* Indicador visual - Estado ACTUAL del usuario */}
                       <div className="mt-2">
@@ -1848,17 +1852,17 @@ const exportSelectedUsers = () => {
                           const currentStatus = getCourseStatus(editingUser);
                           const currentConfig = getStatusConfig(currentStatus);
                           const currentProgress = getProgressDetails(editingUser);
-                          
+
                           return (
                             <div>
-                              <div style={{fontSize: '14px', color: '#666', marginBottom: '4px'}}>
+                              <div style={{ fontSize: '14px', color: '#666', marginBottom: '4px' }}>
                                 Estado actual:
                               </div>
                               <span className={`badge badge-status ${currentConfig.className}`}>
                                 <FontAwesomeIcon icon={currentConfig.icon} /> {currentConfig.label}
                               </span>
                               {currentProgress.total > 0 && (
-                                <div style={{fontSize: '10px', marginTop: '2px', color: '#666'}}>
+                                <div style={{ fontSize: '10px', marginTop: '2px', color: '#666' }}>
                                   {currentProgress.completadas}/{currentProgress.total} ({currentProgress.porcentaje}%)
                                 </div>
                               )}
@@ -1871,10 +1875,10 @@ const exportSelectedUsers = () => {
                       {(() => {
                         const currentStatus = getCourseStatus(editingUser);
                         const willChange = selectedStatus !== currentStatus;
-                        
+
                         return willChange && (
-                          <div className="alert alert-warning mt-2" style={{fontSize: '12px', padding: '8px'}}>
-                            <FontAwesomeIcon icon={faExclamationTriangle} /> 
+                          <div className="alert alert-warning mt-2" style={{ fontSize: '12px', padding: '8px' }}>
+                            <FontAwesomeIcon icon={faExclamationTriangle} />
                             {selectedStatus === 'completado' && ' Al marcar como completado, el progreso se actualizará automáticamente'}
                             {selectedStatus === 'no-iniciado' && ' Al marcar como no iniciado, el progreso se reiniciará por completo'}
                             {selectedStatus === 'en-progreso' && ' El estado en progreso se mantendrá sin cambios'}
@@ -1901,17 +1905,17 @@ const exportSelectedUsers = () => {
                     </div>
                   </div>
                 </div>
-                      {/* Versión más pequeña de la nota */}
-                      <small className="text-muted mt-1 d-block" style={{
-                        fontSize: '18px',
-                        fontStyle: 'italic',
-                        background: '#f8f9fa',
-                        padding: '4px 6px',
-                        borderRadius: '4px',
-                        border: '1px solid #e9ecef'
-                      }}>
-                        <FontAwesomeIcon icon={faLightbulb} style={{color: '#ffc107'}} /> Solo se actualizan los campos modificados
-                      </small>
+                {/* Versión más pequeña de la nota */}
+                <small className="text-muted mt-1 d-block" style={{
+                  fontSize: '18px',
+                  fontStyle: 'italic',
+                  background: '#f8f9fa',
+                  padding: '4px 6px',
+                  borderRadius: '4px',
+                  border: '1px solid #e9ecef'
+                }}>
+                  <FontAwesomeIcon icon={faLightbulb} style={{ color: '#ffc107' }} /> Solo se actualizan los campos modificados
+                </small>
               </div>
 
               <div className="modal-footer" style={{
@@ -2007,10 +2011,10 @@ const exportSelectedUsers = () => {
                       setNewPassword(e.target.value);
                       setPasswordValid(e.target.value.length >= 6);
                     }}
-                    style={{ 
-                      borderRadius: '6px', 
+                    style={{
+                      borderRadius: '6px',
                       border: `2px solid ${passwordValid ? '#ddd' : '#dc3545'}` // Rojo si inválido
-                      }}
+                    }}
                     placeholder="Mínimo 6 caracteres" // ← Agregar esta línea
                   />
                   {/* // Agregar texto informativo debajo: */}
@@ -2075,7 +2079,7 @@ const exportSelectedUsers = () => {
                         <option value={false}>No Iniciado</option>
                         <option value={true}>Completado</option>
                       </select>
-                      
+
                       {/* Indicador visual */}
                       <div className="mt-2">
                         <span className={`badge badge-status ${newStatus ? 'badge-completado' : 'badge-no-iniciado'}`}>
@@ -2247,13 +2251,31 @@ const exportSelectedUsers = () => {
 
               {/* <ExportarExcelFiltrado /> */}
               <ExportarExcelTodos />
-              
+
               <span className='btn_ch bg-naranja me-1' onClick={() => handleId()} >{verId ? <FontAwesomeIcon icon={faEye} /> : <FontAwesomeIcon icon={faEyeSlash} />} Id</span>
               <span className='btn_ch bg-naranja me-1' onClick={() => handleFechaAlta()}>{verFechaAlta ? <FontAwesomeIcon icon={faEye} /> : <FontAwesomeIcon icon={faEyeSlash} />} Fecha de alta</span>
               <span className='btn_ch bg-naranja me-1' onClick={() => handleUltimaActualizacion()}>{verUltimaActualizacion ? <FontAwesomeIcon icon={faEye} /> : <FontAwesomeIcon icon={faEyeSlash} />} Última actualización</span>
-              <span className='btn_ch bg-naranja me-1' onClick={() => handleBookmark()}>{verBookmark ? <FontAwesomeIcon icon={faEye} /> : <FontAwesomeIcon icon={faEyeSlash} />} Bookmark</span>
-              <span className='btn_ch bg-naranja me-1' onClick={() => handlePassword()}>{verPassword ? <FontAwesomeIcon icon={faEye} /> : <FontAwesomeIcon icon={faEyeSlash} />} Password</span>
-              <span className='btn_ch bg-indigo c-blanco me-1' onClick={() => handleER()}>{verER? <FontAwesomeIcon icon={faEye} /> : <FontAwesomeIcon icon={faEyeSlash} />} ER</span>
+              {/* <span className='btn_ch bg-naranja me-1' onClick={() => handleBookmark()}>{verBookmark ? <FontAwesomeIcon icon={faEye} /> : <FontAwesomeIcon icon={faEyeSlash} />} Bookmark</span> */}
+              {/* <span className='btn_ch bg-naranja me-1' onClick={() => handlePassword()}>{verPassword ? <FontAwesomeIcon icon={faEye} /> : <FontAwesomeIcon icon={faEyeSlash} />} Password</span> */}
+              <span className='btn_ch bg-indigo c-blanco me-1' onClick={() => handleER()}>{verER ? <FontAwesomeIcon icon={faEye} /> : <FontAwesomeIcon icon={faEyeSlash} />} ER</span>
+
+              {showAnalytics ? (
+                <>
+                  <span className='btn_ch bg-indigo c-blanco me-1' onClick={() => setShowAnalytics(false)}>← Ocultar</span>
+                </>
+                ) : (
+                  <>
+                    <span
+                      className="btn_ch bg-mint me-1"
+                      onClick={() => setShowAnalytics(true)}
+                    >
+                      <FontAwesomeIcon icon={faChartBar} /> Ver Analytics del Quiz
+                    </span>
+                  </>
+
+                )
+              }
+
 
             </div>
             <div className='col-12 col-md-12 text-left mt-3'>
@@ -2262,69 +2284,80 @@ const exportSelectedUsers = () => {
                 <span className='btn_ch bg-indigo c-blanco me-1' onClick={debugTokenInfo}>
                   <FontAwesomeIcon icon={faCog} /> Debug Token
                 </span>
-                </>
+              </>
               )}
             </div>
           </div>
 
           {/* <!-- COLUMNA 1--> */}
-          <div className="col-md-12 admin-form mt-2 mb-2" >
+          {/* <div className="col-md-12 admin-form mt-2 mb-2" > */}
             <div style={{ display: isActive ? 'block' : 'none' }}>
 
-              <div className="row" >
-                <div className="col-md-4 text-left">
-                  <strong>🔍 Búsqueda Global:</strong>
-                  <input
-                    className='input-search p-2 w-100'
-                    type="text"
-                    placeholder="Buscar en todos los campos..."
-                    value={globalSearch}
-                    onChange={handleGlobalSearch}
-                    style={{
-                      borderRadius: '6px',
-                      border: '2px solid #007bff',
-                      fontSize: '16px'
-                    }}
-                  />
-                </div>
 
-                <div className="col-md-6 text-left">
-                  <strong>Filtros específicos:</strong>
-                  <div className="row">
-                    <div className="col-4">
-                      {/* Nombre:  */}<input className='input-search p-2 w-100' style={{
-                      borderRadius: '6px',
-                      border: '2px solid #007bff',
-                      fontSize: '16px'
-                    }}type="text" placeholder="Nombre..." onChange={findChangeNombre} />
-                    </div>
-                    <div className="col-4">
-                      {/* Usuario:  */}<input className='input-search p-2 w-100' style={{
-                      borderRadius: '6px',
-                      border: '2px solid #007bff',
-                      fontSize: '16px'
-                    }}type="text" placeholder="Usuario..." onChange={findChangeUsuario} />
-                    </div>
-                    <div className="col-4">
-                      {/* Grupo:  */}<input className='input-search p-2 w-100' style={{
-                      borderRadius: '6px',
-                      border: '2px solid #007bff',
-                      fontSize: '16px'
-                    }}type="text" placeholder="Grupo..." onChange={findChangeGrupo} />
-                    </div>
-                  </div>
+
+
+              {/* // En el render del admin, agregar: */}
+              {showAnalytics ? (
+                <div>
+                  <AdminAnalytics />
                 </div>
-                <div className="col-md-2 text-left">
-                  <strong>Filtros Status:</strong>
-                  <div className="row">
-                    <div className="col-12">
-                      {/* Status: */}
-                      {/* <select className='fs-14 p-2 b-none w-100' onChange={findStatus}>
+              ) : (
+                <div>
+
+                  <div className="row" >
+                    <div className="col-md-4 text-left">
+                      <strong>🔍 Búsqueda Global:</strong>
+                      <input
+                        className='input-search p-2 w-100'
+                        type="text"
+                        placeholder="Buscar en todos los campos..."
+                        value={globalSearch}
+                        onChange={handleGlobalSearch}
+                        style={{
+                          borderRadius: '6px',
+                          border: '2px solid #007bff',
+                          fontSize: '16px'
+                        }}
+                      />
+                    </div>
+
+                    <div className="col-md-6 text-left">
+                      <strong>Filtros específicos:</strong>
+                      <div className="row">
+                        <div className="col-4">
+                          {/* Nombre:  */}<input className='input-search p-2 w-100' style={{
+                            borderRadius: '6px',
+                            border: '2px solid #007bff',
+                            fontSize: '16px'
+                          }} type="text" placeholder="Nombre..." onChange={findChangeNombre} />
+                        </div>
+                        <div className="col-4">
+                          {/* Usuario:  */}<input className='input-search p-2 w-100' style={{
+                            borderRadius: '6px',
+                            border: '2px solid #007bff',
+                            fontSize: '16px'
+                          }} type="text" placeholder="Usuario..." onChange={findChangeUsuario} />
+                        </div>
+                        <div className="col-4">
+                          {/* Grupo:  */}<input className='input-search p-2 w-100' style={{
+                            borderRadius: '6px',
+                            border: '2px solid #007bff',
+                            fontSize: '16px'
+                          }} type="text" placeholder="Grupo..." onChange={findChangeGrupo} />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-md-2 text-left">
+                      <strong>Filtros Status:</strong>
+                      <div className="row">
+                        <div className="col-12">
+                          {/* Status: */}
+                          {/* <select className='fs-14 p-2 b-none w-100' onChange={findStatus}>
                         <option value="">Todos</option>
                         <option value="true">Completado</option>
                         <option value="false">No completado</option>
                       </select> */}
-                      {/* <select className='fs-14 p-2 b-none w-100' onChange={findStatus}>
+                          {/* <select className='fs-14 p-2 b-none w-100' onChange={findStatus}>
                         <option value="">Todos los estados</option>
                         <option value="completado">Completado</option>
                         <option value="en-progreso">En Progreso</option>
@@ -2332,400 +2365,316 @@ const exportSelectedUsers = () => {
                         <option value="pendiente">Pendiente</option>
                         <option value="no-iniciado">No Iniciado</option>
                       </select> */}
-                      <select className='fs-14 p-2 b-none w-100' onChange={findStatus}>
-                        <option value="">Todos los estados</option>
-                        <option value="completado">Completado</option>
-                        <option value="en-progreso">En Progreso</option>
-                        <option value="no-iniciado">No Iniciado</option>
-                      </select>
+                          <select className='fs-14 p-2 b-none w-100' onChange={findStatus}>
+                            <option value="">Todos los estados</option>
+                            <option value="completado">Completado</option>
+                            <option value="en-progreso">En Progreso</option>
+                            <option value="no-iniciado">No Iniciado</option>
+                          </select>
 
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
 
-              {/* Panel de Estadísticas - Agregar después de los filtros y antes de la paginación */}
-              {/* {verER ? 
-              <div className="col-md-12 my-2">
-                <div className="row">
-                  <div className="col-md-12">
-                    <div className="stats-panel" style={{
-                      background: '#764ba2',
-                      borderRadius: '12px',
-                      padding: '15px',
-                      color: 'white',
-                      boxShadow: '0 4px 15px rgba(0,0,0,0.1)'
-                    }}>
-                      <h5 style={{margin: '0 0 10px 0', textAlign: 'center'}}>
-                        <FontAwesomeIcon icon={faChartBar} /> Estadísticas Rápidas
-                      </h5>
-                      <div className="row text-center">
-                        <div className="col-md-3">
-                          <div style={{
-                            background: 'rgba(255,255,255,0.2)',
-                            borderRadius: '8px',
-                            padding: '10px',
-                            margin: '5px'
+                  {verER ?
+                    <div className="col-md-12 my-2">
+                      <div className="row">
+                        <div className="col-md-12">
+                          <div className="stats-panel" style={{
+                            background: '#764ba2',
+                            borderRadius: '12px',
+                            padding: '15px',
+                            color: 'white',
+                            boxShadow: '0 4px 15px rgba(0,0,0,0.1)'
                           }}>
-                            <div style={{fontSize: '24px', fontWeight: 'bold'}}>
-                              {estadisticas.total}
-                            </div>
-                            <div style={{fontSize: '16px', opacity: 1}}>
-                              <FontAwesomeIcon icon={faList} /> Total (100%)
-                            </div>
-                          </div>
-                        </div>
-                        
-                        <div className="col-md-3">
-                          <div style={{
-                            background: 'rgba(255,255,255,0.2)',
-                            borderRadius: '8px',
-                            padding: '10px',
-                            margin: '5px'
-                          }}>
-                            <div style={{fontSize: '24px', fontWeight: 'bold'}}>
-                              {estadisticas.completados}
-                            </div>
-                            <div style={{fontSize: '16px', opacity: 1}}>
-                              <FontAwesomeIcon icon={faCheckCircle} /> Completados ({estadisticas.porcentajeCompletados}%)
-                            </div>
-                          </div>
-                        </div>
-                        
-                        <div className="col-md-3">
-                          <div style={{
-                            background: 'rgba(255,255,255,0.2)',
-                            borderRadius: '8px',
-                            padding: '10px',
-                            margin: '5px'
-                          }}>
-                            <div style={{fontSize: '24px', fontWeight: 'bold'}}>
-                              {estadisticas.noCompletados}
-                            </div>
-                            <div style={{fontSize: '16px', opacity: 1}}>
-                              <FontAwesomeIcon icon={faTimesCircle} /> Pendientes ({estadisticas.porcentajePendientes}%)
-                            </div>
-                          </div>
-                        </div>
-                        
-                        <div className="col-md-3">
-                          <div style={{
-                            background: 'rgba(255,255,255,0.2)',
-                            borderRadius: '8px',
-                            padding: '10px',
-                            margin: '5px'
-                          }}>
-                            <div style={{fontSize: '24px', fontWeight: 'bold'}}>
-                              {estadisticas.grupos}
-                            </div>
-                            <div style={{fontSize: '16px', opacity: 1}}>
-                              <FontAwesomeIcon icon={faBuilding} /> Grupos
+                            <h5 style={{ margin: '0 0 10px 0', textAlign: 'center' }}>
+                              <FontAwesomeIcon icon={faChartBar} /> Estadísticas Rápidas
+                            </h5>
+                            <div className="row text-center">
+                              <div className="col-md-3">
+                                <div style={{
+                                  background: 'rgba(255,255,255,0.2)',
+                                  borderRadius: '8px',
+                                  padding: '10px',
+                                  margin: '5px'
+                                }}>
+                                  <div style={{ fontSize: '24px', fontWeight: 'bold' }}>
+                                    {estadisticas.total}
+                                  </div>
+                                  <div style={{ fontSize: '16px', opacity: 1 }}>
+                                    <FontAwesomeIcon icon={faList} /> Total (100%)
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div className="col-md-3">
+                                <div style={{
+                                  background: 'rgba(255,255,255,0.2)',
+                                  borderRadius: '8px',
+                                  padding: '10px',
+                                  margin: '5px'
+                                }}>
+                                  <div style={{ fontSize: '24px', fontWeight: 'bold' }}>
+                                    {estadisticas.completado}
+                                  </div>
+                                  <div style={{ fontSize: '16px', opacity: 1 }}>
+                                    <FontAwesomeIcon icon={faCheckCircle} /> Completados ({estadisticas.porcentajeCompletados}%)
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div className="col-md-3">
+                                <div style={{
+                                  background: 'rgba(255,255,255,0.2)',
+                                  borderRadius: '8px',
+                                  padding: '10px',
+                                  margin: '5px'
+                                }}>
+                                  <div style={{ fontSize: '24px', fontWeight: 'bold' }}>
+                                    {estadisticas['en-progreso']}
+                                  </div>
+                                  <div style={{ fontSize: '16px', opacity: 1 }}>
+                                    <FontAwesomeIcon icon={faSpinner} /> En Progreso ({estadisticas.porcentajeEnProgreso}%)
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div className="col-md-3">
+                                <div style={{
+                                  background: 'rgba(255,255,255,0.2)',
+                                  borderRadius: '8px',
+                                  padding: '10px',
+                                  margin: '5px'
+                                }}>
+                                  <div style={{ fontSize: '24px', fontWeight: 'bold' }}>
+                                    {estadisticas['no-iniciado']}
+                                  </div>
+                                  <div style={{ fontSize: '16px', opacity: 1 }}>
+                                    <FontAwesomeIcon icon={faTimesCircle} /> No Iniciados ({estadisticas.porcentajeNoIniciado}%)
+                                  </div>
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-              </div>
-              : ''} */}
+                    : null}
 
-              {/* Reemplazar el panel de estadísticas existente por: */}
-              {verER ? 
-              <div className="col-md-12 my-2">
-                <div className="row">
-                  <div className="col-md-12">
-                    <div className="stats-panel" style={{
-                      background: '#764ba2',
-                      borderRadius: '12px',
-                      padding: '15px',
-                      color: 'white',
-                      boxShadow: '0 4px 15px rgba(0,0,0,0.1)'
-                    }}>
-                      <h5 style={{margin: '0 0 10px 0', textAlign: 'center'}}>
-                        <FontAwesomeIcon icon={faChartBar} /> Estadísticas Rápidas
-                      </h5>
-                      <div className="row text-center">
-                        <div className="col-md-3">
-                          <div style={{
-                            background: 'rgba(255,255,255,0.2)',
-                            borderRadius: '8px',
-                            padding: '10px',
-                            margin: '5px'
-                          }}>
-                            <div style={{fontSize: '24px', fontWeight: 'bold'}}>
-                              {estadisticas.total}
-                            </div>
-                            <div style={{fontSize: '16px', opacity: 1}}>
-                              <FontAwesomeIcon icon={faList} /> Total (100%)
-                            </div>
-                          </div>
-                        </div>
-                        
-                        <div className="col-md-3">
-                          <div style={{
-                            background: 'rgba(255,255,255,0.2)',
-                            borderRadius: '8px',
-                            padding: '10px',
-                            margin: '5px'
-                          }}>
-                            <div style={{fontSize: '24px', fontWeight: 'bold'}}>
-                              {estadisticas.completado}
-                            </div>
-                            <div style={{fontSize: '16px', opacity: 1}}>
-                              <FontAwesomeIcon icon={faCheckCircle} /> Completados ({estadisticas.porcentajeCompletados}%)
-                            </div>
-                          </div>
-                        </div>
-                        
-                        <div className="col-md-3">
-                          <div style={{
-                            background: 'rgba(255,255,255,0.2)',
-                            borderRadius: '8px',
-                            padding: '10px',
-                            margin: '5px'
-                          }}>
-                            <div style={{fontSize: '24px', fontWeight: 'bold'}}>
-                              {estadisticas['en-progreso']}
-                            </div>
-                            <div style={{fontSize: '16px', opacity: 1}}>
-                              <FontAwesomeIcon icon={faSpinner} /> En Progreso ({estadisticas.porcentajeEnProgreso}%)
-                            </div>
-                          </div>
-                        </div>
-                        
-                        <div className="col-md-3">
-                          <div style={{
-                            background: 'rgba(255,255,255,0.2)',
-                            borderRadius: '8px',
-                            padding: '10px',
-                            margin: '5px'
-                          }}>
-                            <div style={{fontSize: '24px', fontWeight: 'bold'}}>
-                              {estadisticas['no-iniciado']}
-                            </div>
-                            <div style={{fontSize: '16px', opacity: 1}}>
-                              <FontAwesomeIcon icon={faTimesCircle} /> No Iniciados ({estadisticas.porcentajeNoIniciado}%)
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              : null}
-
-
-              {/* ✅ AGREGAR AQUÍ LA PAGINACIÓN: */}
-              <div className="col-md-12 text-center my-2 flex" style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center'
-              }}>
-                <select onChange={(e) => {
-                  setPaginaActual(1)
-                  setItemsPorPagina(Number(e.target.value))
-                }}>
-                  <option value={10}>10</option>
-                  <option value={50}>50</option>
-                  <option value={100}>100</option>
-                  <option value={1000}>1000</option>
-                  <option value={10000}>Todos</option>
-                </select>
-
-                <div className="pagination-wrapper">
-                  <ResponsivePagination
-                    current={paginaActual}
-                    total={totalpaginas}
-                    onPageChange={setPaginaActual}
-                  />
-                </div>
-
-                <span className='fs-20 c-negro'> Registros: <b>{registros}</b></span>
-              </div>
-
-              {/* Agregar después de la paginación */}
-              {selectedUsers.length > 0 && (
-                <div className="col-md-12 text-center mb-2">
-                  <div className="alert alert-info p-3" style={{
-                     
-                    borderRadius: '6px',
+                  {/* Tu contenido actual del admin */}
+                  {/* ✅ AGREGAR AQUÍ LA PAGINACIÓN: */}
+                  <div className="col-md-12 text-center my-2 flex" style={{
                     display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
+                    justifyContent: 'space-between',
+                    alignItems: 'center'
                   }}>
-                    <strong className='px-2'>{selectedUsers.length} usuarios seleccionados</strong>
-                    <div className="">
-                      <span 
-                        className='btn_ch bg-rojo c-blanco me-2' 
-                        onClick={deleteSelectedUsers}
-                      >
-                        <FontAwesomeIcon icon={faTrash} /> Eliminar seleccionados
-                      </span>
-                      <span 
-                        className='btn_ch bg-mint c-negro' 
-                        onClick={exportSelectedUsers}
-                      >
-                        <FontAwesomeIcon icon={faFileExport} /> Exportar seleccionados
-                      </span>
+                    <select onChange={(e) => {
+                      setPaginaActual(1)
+                      setItemsPorPagina(Number(e.target.value))
+                    }}>
+                      <option value={10}>10</option>
+                      <option value={50}>50</option>
+                      <option value={100}>100</option>
+                      <option value={1000}>1000</option>
+                      <option value={10000}>Todos</option>
+                    </select>
+
+                    <div className="pagination-wrapper">
+                      <ResponsivePagination
+                        current={paginaActual}
+                        total={totalpaginas}
+                        onPageChange={setPaginaActual}
+                      />
                     </div>
+
+                    <span className='fs-20 c-negro'> Registros: <b>{registros}</b></span>
+                  </div>
+
+                  {/* Agregar después de la paginación */}
+                  {selectedUsers.length > 0 && (
+                    <div className="col-md-12 text-center mb-2">
+                      <div className="alert alert-info p-3" style={{
+
+                        borderRadius: '6px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                      }}>
+                        <strong className='px-2'>{selectedUsers.length} usuarios seleccionados</strong>
+                        <div className="">
+                          <span
+                            className='btn_ch bg-rojo c-blanco me-2'
+                            onClick={deleteSelectedUsers}
+                          >
+                            <FontAwesomeIcon icon={faTrash} /> Eliminar seleccionados
+                          </span>
+                          <span
+                            className='btn_ch bg-mint c-negro'
+                            onClick={exportSelectedUsers}
+                          >
+                            <FontAwesomeIcon icon={faFileExport} /> Exportar seleccionados
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  <div className='table-responsive' style={{ display: isActive ? 'block' : 'none' }} >
+                    <table className="table table-sm table-hover table-bordered table-striped table-responsive" ref={tableRef}>
+
+                      <thead>
+                        <tr>
+                          <th scope="col">
+                            <input
+                              type="checkbox"
+                              checked={selectAll}
+                              onChange={(e) => handleSelectAll(e.target.checked)}
+                              style={{ transform: 'scale(1.2)' }}
+                            />
+                          </th>
+                          <th scope="col">No</th>
+                          {verId ? <SortableHeader field="id">ID</SortableHeader> : ''}
+                          <SortableHeader field="nombre" className="text-left">Nombre</SortableHeader>
+                          <SortableHeader field="username" className="text-left">Usuario</SortableHeader>
+                          <SortableHeader field="grupo" className="text-center">Grupo</SortableHeader>
+                          {verPassword ? <SortableHeader field="password" className="text-left">Password</SortableHeader> : ''}
+                          <SortableHeader field="type" className="text-center">Tipo</SortableHeader>
+                          <SortableHeader field="status">Status</SortableHeader>
+                          {verFechaAlta ? <SortableHeader field="createdAt">Fecha de alta</SortableHeader> : ''}
+                          {verUltimaActualizacion ? <SortableHeader field="updatedAt">Última actualización</SortableHeader> : ''}
+                          {verBookmark ? <SortableHeader field="bookmark">Bookmark</SortableHeader> : ''}
+                          <th scope="col" className='w100'>Editar</th>
+                          <th scope="col" className='w100'>Eliminar</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+
+                        {
+
+                          itemsEstaPagina.map((option, i) => {
+
+                            return (
+
+                              <tr key={option.Ranking}>
+                                <td className='text-center' data-label="Seleccionar">
+                                  <input
+                                    type="checkbox"
+                                    checked={selectedUsers.includes(option.id)}
+                                    onChange={(e) => handleSelectUser(option.id, e.target.checked)}
+                                    style={{ transform: 'scale(1.2)' }}
+                                  />
+                                </td>
+                                <th scope="row" data-label="No">{i + 1}</th>
+                                {verId ? <td className='fs-14 c-negro' data-label="ID">{option.id}</td> : ''}
+                                <td className='fs-14 c-negro text-left' data-label="Nombre"><span>{option.nombre}</span></td>
+                                <td className='fs-14 c-negro text-left' data-label="Usuario"><span>{option.username}</span></td>
+                                <td className='fs-14 c-negro text-center' data-label="Grupo"><span>{option.grupo}</span></td>
+                                {verPassword ? <td className='fs-14 c-negro text-left' data-label="Password"><span>{option.password}</span></td> : ''}
+                                <td className='fs-14 c-negro text-center' data-label="Tipo">
+                                  {option.type === 'user' ? (
+                                    <span className="badge bg-primary">
+                                      <FontAwesomeIcon icon={faUser} /> User
+                                    </span>
+                                  ) : (
+                                    <span className="badge bg-warning text-dark">
+                                      <FontAwesomeIcon icon={faUserShield} /> Admin
+                                    </span>
+                                  )}
+                                </td>
+                                <td className='fs-14 c-negro text-center' data-label="Status">
+                                  {(() => {
+                                    const status = getCourseStatus(option);
+                                    const config = getStatusConfig(status);
+                                    const progress = getProgressDetails(option);
+
+                                    return (
+                                      <div>
+                                        <span className={`badge badge-status ${config.className}`}>
+                                          <FontAwesomeIcon icon={config.icon} /> {config.label}
+                                        </span>
+                                        {progress.total > 0 && (
+                                          <div style={{ fontSize: '12px', marginTop: '1px', color: '#000' }}>
+                                            {progress.completadas}/{progress.total} ({progress.porcentaje}%)
+                                          </div>
+                                        )}
+                                      </div>
+                                    );
+                                  })()}
+                                </td>
+                                {verFechaAlta ? <td className='fs-14 c-negro' data-label="Fecha de alta">{formatearFechaSimple(option.createdAt)}</td> : ''}
+                                {verUltimaActualizacion ? <td className='fs-14 c-negro' data-label="Última actualización">{formatearFechaSimple(option.updatedAt)}</td> : ''}
+                                {verBookmark ? <td className='fs-14 c-negro' data-label="Bookmark">{option.bookmark}</td> : ''}
+                                <td className='text-center' data-label="Editar">
+                                  <button
+                                    className='btn_ch btn-warning'
+                                    onClick={() => openEditModal(option)}
+                                  >
+                                    <FontAwesomeIcon icon={faEdit} /> Editar
+                                  </button>
+                                </td>
+
+                                {/* Celda Eliminar */}
+                                <td className='text-center' data-label="Eliminar">
+                                  <button
+                                    className='btn_ch btn-danger'
+                                    onClick={() => submitDelete(option.id, option.username, option)}
+                                  >
+                                    <FontAwesomeIcon icon={faTrash} /> Eliminar
+                                  </button>
+                                </td>
+                              </tr>
+
+
+                            )
+                          })
+                        }
+                      </tbody>
+
+                    </table>
+
+                    {/* tabla oculta para la descarga del .xlsx donde se omiten los botones de borrar y editar y las imagenes en la columna status */}
+                    <table className="table table-striped hide" ref={tableRef2}>
+
+                      <thead>
+                        <tr>
+                          <th scope="col">No</th>
+                          <th className='text-center' scope="col">Grupo</th>
+                          <th className='text-left' scope="col">Nombre</th>
+                          <th className='text-left' scope="col">Usuario</th>
+                          <th className='text-left' scope="col">Password</th>
+                          <th scope="col">Status</th>
+
+                        </tr>
+                      </thead>
+                      <tbody>
+
+                        {
+                          itemsEstaPagina.map((option, i) => {
+                            return (
+                              <tr key={i + 1}>
+                                <th scope="row">{i + 1}</th>
+                                {/* <td className='fs-14 c-negro'>{option.grupo}</td> */}
+                                <td className='fs-14 c-negro text-left'><span>{option.grupo}</span></td>
+                                <td className='fs-14 c-negro py-2 text-left'><span>{option.nombre}</span></td>
+                                <td className='fs-14 c-negro text-left'><span>{option.username}</span></td>
+                                <td className='fs-14 c-negro text-left'><span>{option.password}</span></td>
+                                <td className='fs-14 c-negro'>
+                                  <span>{option.status === true ? 'completado' : 'no completado'}</span>
+                                </td>
+
+                              </tr>
+
+                            )
+                          })
+                        }
+
+                      </tbody>
+                    </table>
                   </div>
                 </div>
               )}
 
-              <div className='table-responsive' style={{ display: isActive ? 'block' : 'none' }} >
-                <table className="table table-sm table-hover table-bordered table-striped table-responsive" ref={tableRef}>
-
-                  <thead>
-                    <tr>
-                      <th scope="col">
-                        <input
-                          type="checkbox"
-                          checked={selectAll}
-                          onChange={(e) => handleSelectAll(e.target.checked)}
-                          style={{ transform: 'scale(1.2)' }}
-                        />
-                      </th>
-                      <th scope="col">No</th>
-                      {verId ? <SortableHeader field="id">ID</SortableHeader> : ''}
-                      <SortableHeader field="nombre" className="text-left">Nombre</SortableHeader>
-                      <SortableHeader field="username" className="text-left">Usuario</SortableHeader>
-                      <SortableHeader field="grupo" className="text-center">Grupo</SortableHeader>
-                      {verPassword ? <SortableHeader field="password" className="text-left">Password</SortableHeader> : ''}
-                      <SortableHeader field="type" className="text-center">Tipo</SortableHeader>
-                      <SortableHeader field="status">Status</SortableHeader>
-                      {verFechaAlta ? <SortableHeader field="createdAt">Fecha de alta</SortableHeader> : ''}
-                      {verUltimaActualizacion ? <SortableHeader field="updatedAt">Última actualización</SortableHeader> : ''}
-                      {verBookmark ? <SortableHeader field="bookmark">Bookmark</SortableHeader> : ''}
-                      <th scope="col" className='w100'>Editar</th>
-                      <th scope="col" className='w100'>Eliminar</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-
-                    {
-
-                      itemsEstaPagina.map((option, i) => {
-
-                        return (
-
-                          <tr key={option.Ranking}>
-                            <td className='text-center' data-label="Seleccionar">
-                              <input
-                                type="checkbox"
-                                checked={selectedUsers.includes(option.id)}
-                                onChange={(e) => handleSelectUser(option.id, e.target.checked)}
-                                style={{ transform: 'scale(1.2)' }}
-                              />
-                            </td>
-                            <th scope="row" data-label="No">{i + 1}</th>
-                            {verId ? <td className='fs-14 c-negro' data-label="ID">{option.id}</td> : ''}
-                            <td className='fs-14 c-negro text-left' data-label="Nombre"><span>{option.nombre}</span></td>
-                            <td className='fs-14 c-negro text-left' data-label="Usuario"><span>{option.username}</span></td>
-                            <td className='fs-14 c-negro text-center' data-label="Grupo"><span>{option.grupo}</span></td>
-                            {verPassword ? <td className='fs-14 c-negro text-left' data-label="Password"><span>{option.password}</span></td> : ''}
-                            <td className='fs-14 c-negro text-center' data-label="Tipo">
-                              {option.type === 'user' ? (
-                                <span className="badge bg-primary">
-                                  <FontAwesomeIcon icon={faUser} /> User
-                                </span>
-                              ) : (
-                                <span className="badge bg-warning text-dark">
-                                  <FontAwesomeIcon icon={faUserShield} /> Admin
-                                </span>
-                              )}
-                            </td>
-                            <td className='fs-14 c-negro text-center' data-label="Status">
-                              {(() => {
-                                const status = getCourseStatus(option);
-                                const config = getStatusConfig(status);
-                                const progress = getProgressDetails(option);
-                                
-                                return (
-                                  <div>
-                                    <span className={`badge badge-status ${config.className}`}>
-                                      <FontAwesomeIcon icon={config.icon} /> {config.label}
-                                    </span>
-                                    {progress.total > 0 && (
-                                      <div style={{fontSize: '12px', marginTop: '1px', color: '#000'}}>
-                                        {progress.completadas}/{progress.total} ({progress.porcentaje}%)
-                                      </div>
-                                    )}
-                                  </div>
-                                );
-                              })()}
-                            </td>
-                            {verFechaAlta ? <td className='fs-14 c-negro' data-label="Fecha de alta">{formatearFechaSimple(option.createdAt)}</td> : ''}
-                            {verUltimaActualizacion ? <td className='fs-14 c-negro' data-label="Última actualización">{formatearFechaSimple(option.updatedAt)}</td> : ''}
-                            {verBookmark ? <td className='fs-14 c-negro' data-label="Bookmark">{option.bookmark}</td> : ''}
-                            <td className='text-center' data-label="Editar">
-                              <button
-                                className='btn_ch btn-warning'
-                                onClick={() => openEditModal(option)}
-                              >
-                                <FontAwesomeIcon icon={faEdit} /> Editar
-                              </button>
-                            </td>
-
-                            {/* Celda Eliminar */}
-                            <td className='text-center' data-label="Eliminar">
-                              <button
-                                className='btn_ch btn-danger'
-                                onClick={() => submitDelete(option.id, option.username, option)}
-                              >
-                                <FontAwesomeIcon icon={faTrash} /> Eliminar
-                              </button>
-                            </td>
-                          </tr>
-
-
-                        )
-                      })
-                    }
-                  </tbody>
-
-                </table>
-
-                {/* tabla oculta para la descarga del .xlsx donde se omiten los botones de borrar y editar y las imagenes en la columna status */}
-                <table className="table table-striped hide" ref={tableRef2}>
-
-                  <thead>
-                    <tr>
-                      <th scope="col">No</th>
-                      <th className='text-center' scope="col">Grupo</th>
-                      <th className='text-left' scope="col">Nombre</th>
-                      <th className='text-left' scope="col">Usuario</th>
-                      <th className='text-left' scope="col">Password</th>
-                      <th scope="col">Status</th>
-
-                    </tr>
-                  </thead>
-                  <tbody>
-
-                    {
-                      itemsEstaPagina.map((option, i) => {
-                        return (
-                          <tr key={i + 1}>
-                            <th scope="row">{i + 1}</th>
-                            {/* <td className='fs-14 c-negro'>{option.grupo}</td> */}
-                            <td className='fs-14 c-negro text-left'><span>{option.grupo}</span></td>
-                            <td className='fs-14 c-negro py-2 text-left'><span>{option.nombre}</span></td>
-                            <td className='fs-14 c-negro text-left'><span>{option.username}</span></td>
-                            <td className='fs-14 c-negro text-left'><span>{option.password}</span></td>
-                            <td className='fs-14 c-negro'>
-                              <span>{option.status === true ? 'completado' : 'no completado'}</span>
-                            </td>
-
-                          </tr>
-
-                        )
-                      })
-                    }
-
-                  </tbody>
-                </table>
-              </div>
             </div>
 
             <div className='table-responsive py-2' style={{ display: isActive ? 'none' : 'block' }}>
@@ -2757,7 +2706,7 @@ const exportSelectedUsers = () => {
             </div>
           </div>
         </div>
-      </div>
+      {/* s */}
 
     </>
   )

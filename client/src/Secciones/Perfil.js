@@ -6,9 +6,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowRightLong } from '@fortawesome/free-solid-svg-icons'
 import { faArrowLeftLong } from '@fortawesome/free-solid-svg-icons'
 
-import { DataStore } from '@aws-amplify/datastore';
-import { Ranking } from '../models';
-
 import './Perfil.css';
 
 import * as Img from '../Components/Imagenes'
